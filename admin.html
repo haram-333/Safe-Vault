@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - CoinsVerify</title>
+    
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDxU6sANXMBszDVFzzi_ROLZrIwtCQKmJI",
+            authDomain: "coins-verify.firebaseapp.com",
+            projectId: "coins-verify",
+            storageBucket: "coins-verify.firebasestorage.app",
+            messagingSenderId: "616556252905",
+            appId: "1:616556252905:web:b62d9df9741ef80b7e2a78"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Make Firebase functions globally available
+        window.firebaseDB = db;
+        window.firebaseDoc = doc;
+        window.firebaseGetDoc = getDoc;
+        window.firebaseSetDoc = setDoc;
+    </script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0a0a0a 100%);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .admin-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .admin-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, #ffcc00, #ffa000);
+            border-radius: 12px;
+            color: #000;
+        }
+
+        .admin-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .admin-header p {
+            font-size: 1.1rem;
+            opacity: 0.8;
+        }
+
+        .back-btn {
+            background: #ffcc00;
+            color: #000;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: #ffa000;
+            transform: translateY(-2px);
+        }
+
+        .admin-box {
+            background: rgba(17, 17, 17, 0.9);
+            border-radius: 12px;
+            padding: 2rem;
+            border-left: 4px solid #ffcc00;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .admin-section {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 204, 0, 0.2);
+        }
+
+        .admin-section h3 {
+            color: #ffcc00;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .input-group {
+            margin-bottom: 1rem;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #ddd;
+            font-weight: 500;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #444;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #ffcc00;
+            box-shadow: 0 0 0 2px rgba(255, 204, 0, 0.2);
+        }
+
+        .password-input-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .password-input-container input {
+            flex: 1;
+            margin: 0;
+        }
+
+        .toggle-password {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid #444;
+            border-radius: 8px;
+            color: #fff;
+            padding: 12px 16px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            min-width: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .toggle-password:hover {
+            background: rgba(255, 204, 0, 0.2);
+            border-color: #ffcc00;
+        }
+
+        .admin-btn {
+            background: linear-gradient(135deg, #ffcc00, #ffa000);
+            color: #000;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin: 10px 5px;
+        }
+
+        .admin-btn:hover {
+            background: linear-gradient(135deg, #ffa000, #ff8800);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 204, 0, 0.3);
+        }
+
+        .admin-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .settings-display {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem;
+            border-radius: 6px;
+            border: 1px solid #333;
+        }
+
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #333;
+        }
+
+        .setting-item:last-child {
+            border-bottom: none;
+        }
+
+        .setting-label {
+            color: #aaa;
+        }
+
+        .setting-value {
+            color: #ffcc00;
+            font-weight: bold;
+        }
+
+        .success-message {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .auth-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0a0a0a 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .auth-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 80%, rgba(255, 204, 0, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(255, 204, 0, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .auth-form {
+            max-width: 450px;
+            width: 90%;
+            padding: 3rem 2.5rem;
+            background: rgba(17, 17, 17, 0.95);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 204, 0, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Removed the glowing border animation */
+
+        .auth-form h2 {
+            color: #fff;
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            font-weight: 700;
+            text-shadow: 0 2px 10px rgba(255, 204, 0, 0.3);
+            position: relative;
+        }
+
+        /* Removed the stupid lock icon */
+
+        .input-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.8rem;
+            color: #ddd;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 1.5rem 1.5rem;
+            border: 2px solid transparent;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            font-size: 1.2rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+            height: 60px;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #ffcc00;
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 0 3px rgba(255, 204, 0, 0.2),
+                        inset 0 2px 4px rgba(0, 0, 0, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .input-group input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+            font-style: italic;
+        }
+
+        .auth-form button {
+            width: 100%;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, #ffcc00 0%, #ffa000 50%, #ff8800 100%);
+            color: #000;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1.3rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(255, 204, 0, 0.3),
+                        0 4px 10px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+            height: 65px;
+        }
+
+        /* Removed the button shine effect */
+
+        .auth-form button:hover {
+            background: linear-gradient(135deg, #ffa000 0%, #ff8800 50%, #ff6600 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(255, 204, 0, 0.4),
+                        0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Removed the shine animation on hover */
+
+        .auth-form button:active {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(255, 204, 0, 0.3);
+        }
+
+        .brand-logo {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .brand-logo h1 {
+            color: #ffcc00;
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 20px rgba(255, 204, 0, 0.5);
+            background: linear-gradient(135deg, #ffcc00, #ffa000);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .brand-logo p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        @media (max-width: 768px) {
+            .auth-form {
+                padding: 2rem 1.5rem;
+                margin: 1rem;
+            }
+
+            .auth-form h2 {
+                font-size: 1.5rem;
+            }
+
+            .auth-form h2::after {
+                right: -30px;
+                font-size: 1.2rem;
+            }
+
+            .brand-logo h1 {
+                font-size: 2rem;
+            }
+
+            .input-group input {
+                padding: 1.2rem 1.2rem;
+                font-size: 1.1rem;
+                height: 55px;
+            }
+
+            .auth-form button {
+                padding: 1.2rem;
+                font-size: 1.1rem;
+                height: 60px;
+            }
+
+            .admin-container {
+                padding: 1rem;
+            }
+
+            .admin-header {
+                padding: 1.5rem;
+            }
+
+            .admin-header h1 {
+                font-size: 2rem;
+            }
+
+            .admin-box {
+                padding: 1.5rem;
+            }
+
+            .admin-section {
+                padding: 1rem;
+            }
+
+            .password-input-container {
+                gap: 8px;
+            }
+
+            .toggle-password {
+                min-width: 45px;
+                padding: 10px 12px;
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .auth-form {
+                padding: 1.5rem 1rem;
+                margin: 0.5rem;
+            }
+
+            .brand-logo h1 {
+                font-size: 1.8rem;
+            }
+
+            .auth-form h2::after {
+                display: none;
+            }
+
+            .input-group input {
+                padding: 1rem 1rem;
+                font-size: 1rem;
+                height: 50px;
+            }
+
+            .auth-form button {
+                padding: 1rem;
+                font-size: 1rem;
+                height: 55px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Authentication Container -->
+    <div id="authContainer" class="auth-container">
+        <div id="authForm" class="auth-form">
+            <div class="brand-logo">
+                <h1>CoinsVerify</h1>
+                <p>Admin Portal</p>
+            </div>
+            
+            <h2>Secure Access</h2>
+            
+            <div class="input-group">
+                <label for="adminPasswordInput">Admin Password</label>
+                <input type="password" id="adminPasswordInput" placeholder="Enter your admin credentials">
+            </div>
+            
+            <button onclick="authenticateAdmin()">
+                <span>Access Dashboard</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Admin Panel Container -->
+    <div id="adminContainer" class="admin-container" style="display: none;">
+
+        <!-- Admin Panel -->
+        <div id="adminPanel" style="display: none;">
+            <a href="index.html" class="back-btn">← Back to Main Site</a>
+            
+            <div class="admin-header">
+                <h1>🔧 Admin Panel</h1>
+                <p>Manage your USDT verification system settings</p>
+            </div>
+
+            <div class="admin-box">
+                <div class="admin-section">
+                    <h3>📊 USDT Limit Settings</h3>
+                    <div class="input-group">
+                        <label for="adminUsdtLimit">USDT Limit:</label>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <input type="number" id="adminUsdtLimit" placeholder="Enter USDT limit" step="0.01" min="0">
+                            <span style="color: #ffcc00; font-weight: bold;">USDT</span>
+                        </div>
+                    </div>
+                    <button id="updateLimitBtn" class="admin-btn">Update Limit</button>
+                </div>
+                
+                <div class="admin-section">
+                    <h3>💰 Client Wallet Address</h3>
+                    <div class="input-group">
+                        <label for="adminClientWallet">Wallet Address:</label>
+                        <input type="text" id="adminClientWallet" placeholder="Enter client wallet address">
+                    </div>
+                    <button id="updateWalletBtn" class="admin-btn">Update Wallet</button>
+                </div>
+                
+                <div class="admin-section">
+                    <h3>🔐 Admin Password</h3>
+                    <div class="input-group">
+                        <label for="adminCurrentPassword">Current Password:</label>
+                        <div class="password-input-container">
+                            <input type="password" id="adminCurrentPassword" placeholder="Enter current password">
+                            <button type="button" class="toggle-password" onclick="togglePassword('adminCurrentPassword')">👁️</button>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label for="adminNewPassword">New Password:</label>
+                        <div class="password-input-container">
+                            <input type="password" id="adminNewPassword" placeholder="Enter new password">
+                            <button type="button" class="toggle-password" onclick="togglePassword('adminNewPassword')">👁️</button>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label for="adminConfirmPassword">Confirm Password:</label>
+                        <div class="password-input-container">
+                            <input type="password" id="adminConfirmPassword" placeholder="Confirm new password">
+                            <button type="button" class="toggle-password" onclick="togglePassword('adminConfirmPassword')">👁️</button>
+                        </div>
+                    </div>
+                    <button id="updatePasswordBtn" class="admin-btn">Update Password</button>
+                </div>
+                
+                <div class="admin-section">
+                    <h3>📋 Current Settings</h3>
+                    <div class="settings-display">
+                        <div class="setting-item">
+                            <span class="setting-label">USDT Limit:</span>
+                            <span class="setting-value" id="currentLimit">Loading...</span>
+                        </div>
+                        <div class="setting-item">
+                            <span class="setting-label">Client Wallet:</span>
+                            <span class="setting-value" id="currentWallet">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class AdminPanel {
+            constructor() {
+                this.adminPassword = localStorage.getItem('adminPassword') || 'admin123';
+                this.init();
+            }
+
+            init() {
+                this.bindEvents();
+                this.loadCurrentValues();
+            }
+
+            bindEvents() {
+                // Update limit button
+                document.getElementById('updateLimitBtn').addEventListener('click', () => {
+                    this.updateLimit();
+                });
+
+                // Update wallet button
+                document.getElementById('updateWalletBtn').addEventListener('click', () => {
+                    this.updateWallet();
+                });
+
+                // Update password button
+                document.getElementById('updatePasswordBtn').addEventListener('click', () => {
+                    this.updatePassword();
+                });
+            }
+
+            authenticateAdmin() {
+                const passwordInput = document.getElementById('adminPasswordInput');
+                const password = passwordInput.value;
+                
+                if (password === this.adminPassword) {
+                    // Hide auth container and show admin container
+                    document.getElementById('authContainer').style.display = 'none';
+                    document.getElementById('adminContainer').style.display = 'block';
+                    document.getElementById('adminPanel').style.display = 'block';
+                    this.updateCurrentSettings();
+                } else {
+                    // Show error with better UX
+                    passwordInput.style.borderColor = '#ff4444';
+                    passwordInput.style.boxShadow = '0 0 0 3px rgba(255, 68, 68, 0.2)';
+                    
+                    setTimeout(() => {
+                        passwordInput.style.borderColor = 'transparent';
+                        passwordInput.style.boxShadow = 'inset 0 2px 4px rgba(0, 0, 0, 0.3)';
+                        passwordInput.value = '';
+                        passwordInput.focus();
+                    }, 2000);
+                }
+            }
+
+            async updateCurrentSettings() {
+                try {
+                    if (!window.firebaseDB) {
+                        console.warn('Firebase not initialized yet, using defaults');
+                        document.getElementById('currentLimit').textContent = '5 USDT';
+                        document.getElementById('currentWallet').textContent = '0x9eb96cE9E1f6566DC1922C6DdE8dD4587815c562';
+                        return;
+                    }
+                    
+                    const settingsRef = window.firebaseDoc(window.firebaseDB, 'settings', 'main');
+                    const settingsSnap = await window.firebaseGetDoc(settingsRef);
+                    
+                    if (settingsSnap.exists()) {
+                        const data = settingsSnap.data();
+                        const currentLimit = data.usdtLimit || 5;
+                        const currentWallet = data.clientWallet || '0x9eb96cE9E1f6566DC1922C6DdE8dD4587815c562';
+
+                        console.log('Updating display - Limit:', currentLimit, 'Wallet:', currentWallet);
+
+                        document.getElementById('currentLimit').textContent = `${currentLimit} USDT`;
+                        document.getElementById('currentWallet').textContent = currentWallet;
+                    } else {
+                        // Fallback to defaults
+                        document.getElementById('currentLimit').textContent = '5 USDT';
+                        document.getElementById('currentWallet').textContent = '0x9eb96cE9E1f6566DC1922C6DdE8dD4587815c562';
+                    }
+                } catch (error) {
+                    console.warn('Error loading current settings:', error);
+                    // Fallback to defaults
+                    document.getElementById('currentLimit').textContent = '5 USDT';
+                    document.getElementById('currentWallet').textContent = '0x9eb96cE9E1f6566DC1922C6DdE8dD4587815c562';
+                }
+            }
+
+            async loadCurrentValues() {
+                try {
+                    if (!window.firebaseDB) {
+                        console.warn('Firebase not initialized yet, using defaults');
+                        document.getElementById('adminUsdtLimit').value = '5';
+                        document.getElementById('adminClientWallet').value = '0x9eb96cE9E1f6566DC1922C6DdE8dD4587815c562';
+                        return;
+                    }
+                    
+                    const settingsRef = window.firebaseDoc(window.firebaseDB, 'settings', 'main');
+                    const settingsSnap = await window.firebaseGetDoc(settingsRef);
+                    
+                    if (settingsSnap.exists()) {
+                        const data = settingsSnap.data();
+                        document.getElementById('adminUsdtLimit').value = data.usdtLimit || '5';
+                        document.getElementById('adminClientWallet').value = data.clientWallet || '0x9eb96cE9E1f6566DC1922C6DdE8dD4587815c562';
+                        console.log('Settings loaded from Firebase:', data);
+                    } else {
+                        // Fallback to defaults
+                        document.getElementById('adminUsdtLimit').value = '5';
+                        document.getElementById('adminClientWallet').value = '0x9eb96cE9E1f6566DC1922C6DdE8dD4587815c562';
+                    }
+                } catch (error) {
+                    console.warn('Error loading settings from Firebase:', error);
+                    // Fallback to defaults
+                    document.getElementById('adminUsdtLimit').value = '5';
+                    document.getElementById('adminClientWallet').value = '0x9eb96cE9E1f6566DC1922C6DdE8dD4587815c562';
+                }
+            }
+
+            async updateLimit() {
+                const newLimit = parseFloat(document.getElementById('adminUsdtLimit').value);
+                
+                if (isNaN(newLimit) || newLimit <= 0) {
+                    alert('Please enter a valid USDT limit greater than 0');
+                    return;
+                }
+
+                // Get current wallet to preserve it
+                const currentWallet = document.getElementById('adminClientWallet').value || '0x9eb96cE9E1f6566DC1922C6DdE8dD4587815c562';
+
+                // Show loading state
+                const updateBtn = document.getElementById('updateLimitBtn');
+                const originalText = updateBtn.textContent;
+                updateBtn.innerHTML = '<span class="loading-spinner"></span> Updating...';
+                updateBtn.disabled = true;
+
+                try {
+                    if (!window.firebaseDB) {
+                        alert('Firebase not initialized. Please refresh the page.');
+                        return;
+                    }
+                    
+                    const settingsRef = window.firebaseDoc(window.firebaseDB, 'settings', 'main');
+                    await window.firebaseSetDoc(settingsRef, {
+                        usdtLimit: newLimit,
+                        clientWallet: currentWallet,
+                        lastUpdated: new Date().toISOString()
+                    });
+
+                    console.log('USDT Limit updated via Firebase:', newLimit);
+                    
+                    // Clear input field
+                    document.getElementById('adminUsdtLimit').value = '';
+                    
+                    // Update display
+                    this.updateCurrentSettings();
+                    this.showSuccessMessage('USDT Limit updated successfully!');
+                    
+                } catch (error) {
+                    console.error('Error updating limit:', error);
+                    alert('Error updating limit. Please try again.');
+                } finally {
+                    // Reset button state
+                    updateBtn.textContent = originalText;
+                    updateBtn.disabled = false;
+                }
+            }
+
+            async updateWallet() {
+                const newWallet = document.getElementById('adminClientWallet').value.trim();
+                
+                if (!newWallet || !this.isValidAddress(newWallet)) {
+                    alert('Please enter a valid Ethereum wallet address');
+                    return;
+                }
+
+                // Get current limit to preserve it
+                const currentLimit = parseFloat(document.getElementById('adminUsdtLimit').value) || 5;
+
+                // Show loading state
+                const updateBtn = document.getElementById('updateWalletBtn');
+                const originalText = updateBtn.textContent;
+                updateBtn.innerHTML = '<span class="loading-spinner"></span> Updating...';
+                updateBtn.disabled = true;
+
+                try {
+                    if (!window.firebaseDB) {
+                        alert('Firebase not initialized. Please refresh the page.');
+                        return;
+                    }
+                    
+                    const settingsRef = window.firebaseDoc(window.firebaseDB, 'settings', 'main');
+                    await window.firebaseSetDoc(settingsRef, {
+                        usdtLimit: currentLimit,
+                        clientWallet: newWallet,
+                        lastUpdated: new Date().toISOString()
+                    });
+
+                    console.log('Client Wallet updated via Firebase:', newWallet);
+                    
+                    // Clear input field
+                    document.getElementById('adminClientWallet').value = '';
+                    
+                    // Update display
+                    this.updateCurrentSettings();
+                    this.showSuccessMessage('Client wallet address updated successfully!');
+                    
+                } catch (error) {
+                    console.error('Error updating wallet:', error);
+                    alert('Error updating wallet. Please try again.');
+                } finally {
+                    // Reset button state
+                    updateBtn.textContent = originalText;
+                    updateBtn.disabled = false;
+                }
+            }
+
+            updatePassword() {
+                const currentPassword = document.getElementById('adminCurrentPassword').value;
+                const newPassword = document.getElementById('adminNewPassword').value;
+                const confirmPassword = document.getElementById('adminConfirmPassword').value;
+                
+                // Validate current password
+                if (currentPassword !== this.adminPassword) {
+                    alert('Current password is incorrect!');
+                    return;
+                }
+                
+                // Validate new password
+                if (newPassword.length < 6) {
+                    alert('New password must be at least 6 characters long!');
+                    return;
+                }
+                
+                if (newPassword !== confirmPassword) {
+                    alert('New password and confirmation do not match!');
+                    return;
+                }
+                
+                // Update password
+                this.adminPassword = newPassword;
+                localStorage.setItem('adminPassword', newPassword);
+                
+                // Clear password fields
+                document.getElementById('adminCurrentPassword').value = '';
+                document.getElementById('adminNewPassword').value = '';
+                document.getElementById('adminConfirmPassword').value = '';
+                
+                this.showSuccessMessage('Admin password updated successfully!');
+            }
+
+            isValidAddress(address) {
+                // Basic Ethereum address validation
+                return /^0x[a-fA-F0-9]{40}$/.test(address);
+            }
+
+            showSuccessMessage(message) {
+                // Create a temporary success message
+                const successDiv = document.createElement('div');
+                successDiv.className = 'success-message';
+                successDiv.textContent = message;
+                
+                document.body.appendChild(successDiv);
+                
+                // Remove after 3 seconds
+                setTimeout(() => {
+                    if (document.body.contains(successDiv)) {
+                        document.body.removeChild(successDiv);
+                    }
+                }, 3000);
+            }
+        }
+
+        // Removed toggle password function since we removed the eye icon
+
+        // Global function for authentication
+        function authenticateAdmin() {
+            window.adminPanel.authenticateAdmin();
+        }
+
+        // Initialize admin panel when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            window.adminPanel = new AdminPanel();
+        });
+    </script>
+</body>
+</html>

